@@ -186,49 +186,51 @@ class PhoneBook:
             print("\nThe contact to update is:")
             self.print_contact(contact_to_update)
 
-            print("Which field do you want to update?")
-            print("1. First Name")
-            print("2. Last Name")
-            print("3. Phone Number")
-            print("4. Email Address")
-            print("5. Address")
-            field_index = input("Enter the index of the field to update (or -1 to exit): ").strip()
+            field_index = 'invalid'
+            while not field_index == '-1':
+                print("Which field do you want to update?")
+                print("1. First Name")
+                print("2. Last Name")
+                print("3. Phone Number")
+                print("4. Email Address")
+                print("5. Address")
+                field_index = input("Enter the index of the field to update (or -1 to exit): ").strip()
 
-            while field_index not in ['-1', '1', '2', '3', '4', '5']:
-                field_index = input("Invalid index. Please try again: ").strip()
+                while field_index not in ['-1', '1', '2', '3', '4', '5']:
+                    field_index = input("Invalid index. Please try again: ").strip()
 
-            if field_index == '-1':
+                if field_index == '-1':
+                    print('\n')
+                    break
+
+                new_value = input("Enter the new value: ").strip()
+                if (field_index in ['1', '2', '3']):
+                    new_value = self.input_mandatory_field(new_value)
+                if (field_index == '3'):
+                    while not self.is_valid_phone_number(new_value):
+                        new_value = input("Phone number must be in format (###) ###-###. Please try again: ").strip()
+                if (field_index == '4'):
+                    while not self.is_valid_email(new_value):
+                        new_value = input("Invalid email address. Please try again (or press Enter to delete previous email address): ").strip()
                 print('\n')
-                continue
 
-            new_value = input("Enter the new value: ").strip()
-            if (field_index in ['1', '2', '3']):
-                new_value = self.input_mandatory_field(new_value)
-            if (field_index == '3'):
-                while not self.is_valid_phone_number(new_value):
-                    new_value = input("Phone number must be in format (###) ###-###. Please try again: ").strip()
-            if (field_index == '4'):
-                while not self.is_valid_email(new_value):
-                    new_value = input("Invalid email address. Please try again (or press Enter to delete previous email address): ").strip()
-            print('\n')
+                # if possible add confirm whether to update
+                if field_index == '1':
+                    contact_to_update.set_first_name(new_value)
+                elif field_index == '2':
+                    contact_to_update.set_last_name(new_value)
+                elif field_index == '3':
+                    contact_to_update.set_phone_number(new_value)
+                elif field_index == '4':
+                    contact_to_update.set_email_address(new_value)
+                elif field_index == '5':
+                    contact_to_update.set_address(new_value)
 
-            # if possible add confirm whether to update
-            if field_index == '1':
-                contact_to_update.set_first_name(new_value)
-            elif field_index == '2':
-                contact_to_update.set_last_name(new_value)
-            elif field_index == '3':
-                contact_to_update.set_phone_number(new_value)
-            elif field_index == '4':
-                contact_to_update.set_email_address(new_value)
-            elif field_index == '5':
-                contact_to_update.set_address(new_value)
-
-            print("The contact is now: ")
-            self.print_contact(contact_to_update)
+                print("The contact is now: ")
+                self.print_contact(contact_to_update)
 
 phone_book = PhoneBook()
 phone_book.create_contact()
-phone_book.print_all_contacts()
-phone_book.search_contact()
+#phone_book.print_all_contacts()
+#phone_book.search_contact()
 phone_book.update_contact()
