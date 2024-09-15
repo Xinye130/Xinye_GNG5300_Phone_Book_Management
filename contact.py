@@ -1,7 +1,7 @@
 import datetime
 
 class Contact:
-    def __init__(self, first_name, last_name, phone_number, email_address, address):
+    def __init__(self, first_name = '', last_name = '', phone_number = '', email_address = '', address = ''):
         self._first_name = first_name
         self._last_name = last_name
         self._phone_number = phone_number
