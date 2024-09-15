@@ -42,6 +42,16 @@ class PhoneBook:
         # Regular expression for validating an email address: (user_name)@(domain_name).(top-leveldomain)  
         email_regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
         return re.fullmatch(email_regex, email) is not None
+    
+    def is_valid_phone_number(self, phone_number):
+        # Regular expression for validating a phone number: (###) ###-####
+        phone_number_regex = re.compile(r'\(\d{3}\) \d{3}-\d{4}')
+        return re.fullmatch(phone_number_regex, phone_number) is not None
+    
+    def input_mandatory_field(self, value):
+        while value == "":
+            value = input("Mandatory field. Please enter a valid value: ").strip()
+        return value
  
     def create_contact(self):
         while True:
@@ -52,22 +62,23 @@ class PhoneBook:
             choice = input("Enter your choice (1/2/3): ")
 
             if choice == '1':
-                # add forcing name input
-                # add check and parse phone number format
-                # add check for email format
-                first_name = input("Enter first name: ").strip()
-                last_name = input("Enter last name: ").strip()
-                phone_number = input("Enter phone number: ").strip()
-                email_address = input("Enter email address (or press Enter to skip): ").strip() or ""
+                first_name = self.input_mandatory_field(input("Enter first name: ").strip())
+                last_name = self.input_mandatory_field(input("Enter last name: ").strip())
+                phone_number = self.input_mandatory_field(input("Enter phone number in the format (###) ###-####: ").strip())
+                while not self.is_valid_phone_number(phone_number):
+                    phone_number = input("Invalid phone number. Please try again: ").strip()
+                email_address = input("Enter email address (or press Enter to skip): ").strip()
                 while not self.is_valid_email(email_address):
-                    email_address = input("Invalid email address. Please try again: ").strip() or ""
-                address = input("Enter address (or press Enter to skip): ").strip() or ""
+                    email_address = input("Invalid email address. Please try again: ").strip()
+                address = input("Enter address (or press Enter to skip): ").strip()
 
                 new_contact = Contact(first_name, last_name, phone_number, email_address, address)
                 self.contacts.append(new_contact)
                 print(f"Contact added: {first_name} {last_name}, {phone_number}, {email_address}, {address}\n")
 
             elif choice == '2':
+                # add validate phone number, email, and madatory fields
+                # only add qualified contacts, output error, output succeeded number
                 csv_file = input("Enter the path to the CSV file: ")
                 try:
                     with open(csv_file, newline='') as file:
@@ -100,7 +111,7 @@ class PhoneBook:
             search_type = input("Enter your choice (1/2/3): ").strip()
 
             if search_type in ['1', '2']:
-                search_query = input("Enter the search query: ")
+                search_query = self.input_mandatory_field(input("Enter the search query: ").strip()) 
                 matches = []
 
                 for contact in self.contacts:
@@ -131,7 +142,7 @@ class PhoneBook:
 
     def update_contact(self):
         while True:
-            search_query = input("Enter the name of the contact to be updated (or -1 to exit): ").strip()
+            search_query = self.input_mandatory_field(input("Enter the name of the contact to be updated (or -1 to exit): ").strip())
 
             if search_query == '-1':
                 print('\n')
@@ -190,16 +201,18 @@ class PhoneBook:
                 print('\n')
                 continue
 
-            new_value = input("Enter the new value: ").strip() or ""
+            new_value = input("Enter the new value: ").strip()
             if (field_index in ['1', '2', '3']):
-                while new_value == "":
-                    new_value = input("Mandatory field. Please enter a valid value: ").strip()
+                new_value = self.input_mandatory_field(new_value)
+            if (field_index == '3'):
+                while not self.is_valid_phone_number(new_value):
+                    new_value = input("Phone number must be in format (###) ###-###. Please try again: ").strip()
             if (field_index == '4'):
                 while not self.is_valid_email(new_value):
                     new_value = input("Invalid email address. Please try again (or press Enter to delete previous email address): ").strip()
-            
             print('\n')
 
+            # if possible add confirm whether to update
             if field_index == '1':
                 contact_to_update.set_first_name(new_value)
             elif field_index == '2':
@@ -217,5 +230,5 @@ class PhoneBook:
 phone_book = PhoneBook()
 phone_book.create_contact()
 phone_book.print_all_contacts()
-#phone_book.search_contact()
+phone_book.search_contact()
 phone_book.update_contact()
