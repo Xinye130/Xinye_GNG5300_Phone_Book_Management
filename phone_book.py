@@ -1,6 +1,7 @@
 from contact import Contact
 from tabulate import tabulate
 import csv
+import re
 
 #contact = contact.Contact("John", "Doe", "555-555-5555", "", "")
 
@@ -29,6 +30,9 @@ class PhoneBook:
             choice = input("Enter your choice (1/2/3): ")
 
             if choice == '1':
+                # add forcing name input
+                # add check and parse phone number format
+                # add check for email format
                 first_name = input("Enter first name: ")
                 last_name = input("Enter last name: ")
                 phone_number = input("Enter phone number: ")
@@ -63,6 +67,49 @@ class PhoneBook:
             else:
                 print("Invalid choice. Please try again.\n")
 
+    def find_contact(self):
+        while True:
+            print("Do you want to search by:")
+            print("1. Full name")
+            print("2. Telephone number")
+            print("Or enter 3 to exit.")
+            search_type = input("Enter your choice (1/2/3): ").strip()
+
+            if search_type in ['1', '2']:
+                search_query = input("Enter the search query: ")
+                matches = []
+
+                for contact in self.contacts:
+                    if search_type == '1':
+                        query_name = ''.join(search_query.lower().split())
+                        full_name = ''.join(f"{contact.get_first_name()} {contact.get_last_name()}".lower().split())
+                        if query_name in full_name:
+                            matches.append(contact)
+                    elif search_type == '2':
+                        query_number = re.sub(r'\D', '', search_query)
+                        phone_number = re.sub(r'\D', '', contact.get_phone_number())
+                        if query_number in phone_number:
+                            matches.append(contact)
+
+                if matches:
+                    print("Here are the contacts that meet the requirement:")
+                    headers = ["First Name", "Last Name", "Phone Number", "Email Address", "Address"]
+                    rows = [[contact.get_first_name(), contact.get_last_name(), contact.get_phone_number(), 
+                            contact.get_email_address(), contact.get_address()] for contact in matches]
+                    print(tabulate(rows, headers=headers, tablefmt="grid"))
+                    print("\n")
+                else:
+                    print("No contact meets the requirement.\n")
+            
+            elif search_type == '3':
+                print("Exiting.\n")
+                break
+
+            else:
+                print("Invalid choice. Please try again.\n")
+
+
 phone_book = PhoneBook()
 phone_book.create_contact()
 phone_book.print_contacts()
+phone_book.find_contact()
