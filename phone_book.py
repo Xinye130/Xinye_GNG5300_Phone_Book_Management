@@ -228,9 +228,66 @@ class PhoneBook:
 
                 print("The contact is now: ")
                 self.print_contact(contact_to_update)
+    
+    def delete_contact(self):
+        while True:
+            print("Do you want to delete contacts manually or batch delete from CSV?")
+            print("1. Delete manually")
+            print("2. Batch delete from CSV")
+            print("Or enter -1 to exit.")
+            choice = input("Enter your choice (1/2/-1): ").strip()
+
+            if choice == '-1':
+                print("Exiting.\n")
+                break
+
+            elif choice == '1':
+                name_to_delete = input("Enter the full name of the contact to delete: ").strip().lower()
+                found = False
+                for contact in self.contacts:
+                    full_name = f"{contact.get_first_name()} {contact.get_last_name()}".lower()
+                    if full_name == name_to_delete:
+                        self.contacts.remove(contact)
+                        print(f"Contact deleted: {full_name}")
+                        found = True
+                        break
+                if not found:
+                    print(f"Contact '{name_to_delete}' not found.\n")
+
+            elif choice == '2':
+                csv_file = input("Enter the path to the CSV file: ").strip()
+                try:
+                    with open(csv_file, newline='') as file:
+                        reader = csv.reader(file)
+                        attempted_deletions = 0
+                        successful_deletions = 0
+                        for row in reader:
+                            if row:
+                                full_name = row[0].strip().lower()
+                                if full_name:
+                                    attempted_deletions += 1
+                                    found = False
+                                    for contact in self.contacts:
+                                        contact_full_name = f"{contact.get_first_name()} {contact.get_last_name()}".lower()
+                                        if contact_full_name == full_name:
+                                            self.contacts.remove(contact)
+                                            print(f"Contact deleted: {full_name}")
+                                            successful_deletions += 1
+                                            found = True
+                                            break
+                                    if not found:
+                                        print(f"Contact '{full_name}' not found.")
+                        print(f"Batch delete completed: {successful_deletions}/{attempted_deletions} contacts deleted successfully.\n")
+                except FileNotFoundError:
+                    print("CSV file not found. Please try again.\n")
+
+            else:
+                print("Invalid choice. Please try again.\n")
 
 phone_book = PhoneBook()
 phone_book.create_contact()
-#phone_book.print_all_contacts()
+phone_book.print_all_contacts()
 #phone_book.search_contact()
-phone_book.update_contact()
+#phone_book.update_contact()
+phone_book.delete_contact()
+phone_book.print_all_contacts()
