@@ -11,7 +11,7 @@ class PhoneBook:
     def __init__(self):
         self.contacts = []
 
-    def print_contacts(self):
+    def print_all_contacts(self):
         if not self.contacts:
             print("No contacts available.\n")
             return
@@ -28,6 +28,12 @@ class PhoneBook:
                  contact.get_email_address(), contact.get_address()]]
         print(tabulate(rows, headers=headers, tablefmt="grid"))
         print("\n")
+
+    def print_contact_list(self, contacts):
+        headers = ["First Name", "Last Name", "Phone Number", "Email Address", "Address"]
+        rows = [[contact.get_first_name(), contact.get_last_name(), contact.get_phone_number(), 
+                 contact.get_email_address(), contact.get_address()] for contact in contacts]
+        print(tabulate(rows, headers=headers, tablefmt="grid", showindex="always"))
 
     def create_contact(self):
         while True:
@@ -75,7 +81,7 @@ class PhoneBook:
             else:
                 print("Invalid choice. Please try again.\n")
 
-    def find_contact(self):
+    def search_contact(self):
         while True:
             print("Do you want to search by:")
             print("1. Full name")
@@ -101,10 +107,7 @@ class PhoneBook:
 
                 if matches:
                     print("Here are the contacts that meet the requirement:")
-                    headers = ["First Name", "Last Name", "Phone Number", "Email Address", "Address"]
-                    rows = [[contact.get_first_name(), contact.get_last_name(), contact.get_phone_number(), 
-                            contact.get_email_address(), contact.get_address()] for contact in matches]
-                    print(tabulate(rows, headers=headers, tablefmt="grid", showindex="always"))
+                    self.print_contact_list(matches)
                     print("\n")
                 else:
                     print("No contact meets the requirement.\n")
@@ -118,7 +121,7 @@ class PhoneBook:
 
     def update_contact(self):
         while True:
-            search_query = input("Enter the name of the contact to be updated (or -1 to exit): ").strip().lower()
+            search_query = input("Enter the name of the contact to be updated (or -1 to exit): ").strip()
 
             if search_query == '-1':
                 print('\n')
@@ -126,19 +129,16 @@ class PhoneBook:
 
             matches = []
             for contact in self.contacts:
-                full_name = f"{contact.get_first_name()} {contact.get_last_name()}".lower()
-                if search_query in full_name:
+                query_name = ''.join(search_query.lower().split())
+                full_name = ''.join(f"{contact.get_first_name()} {contact.get_last_name()}".lower().split())
+                if query_name in full_name:
                     matches.append(contact)
 
             if not matches:
                 print("No contact matches the query. Please try again.")
                 continue
 
-            # add helper function to print contact list
-            headers = ["First Name", "Last Name", "Phone Number", "Email Address", "Address"]
-            rows = [[contact.get_first_name(), contact.get_last_name(), contact.get_phone_number(), 
-                    contact.get_email_address(), contact.get_address()] for contact in matches]
-            print(tabulate(rows, headers=headers, tablefmt="grid", showindex="always"))
+            self.print_contact_list(matches)
 
             if len(matches) > 1:
                 index = -2
@@ -199,6 +199,6 @@ class PhoneBook:
 
 phone_book = PhoneBook()
 phone_book.create_contact()
-phone_book.print_contacts()
-#phone_book.find_contact()
+phone_book.print_all_contacts()
+#phone_book.search_contact()
 phone_book.update_contact()
