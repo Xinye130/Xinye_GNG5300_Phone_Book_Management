@@ -34,7 +34,15 @@ class PhoneBook:
         rows = [[contact.get_first_name(), contact.get_last_name(), contact.get_phone_number(), 
                  contact.get_email_address(), contact.get_address()] for contact in contacts]
         print(tabulate(rows, headers=headers, tablefmt="grid", showindex="always"))
-
+    
+    def is_valid_email(self, email):
+        if email == "":
+            return True
+        
+        # Regular expression for validating an email address: (user_name)@(domain_name).(top-leveldomain)  
+        email_regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
+        return re.fullmatch(email_regex, email) is not None
+ 
     def create_contact(self):
         while True:
             print("Select an option:")
@@ -47,11 +55,13 @@ class PhoneBook:
                 # add forcing name input
                 # add check and parse phone number format
                 # add check for email format
-                first_name = input("Enter first name: ")
-                last_name = input("Enter last name: ")
-                phone_number = input("Enter phone number: ")
-                email_address = input("Enter email address (optional): ") or ""
-                address = input("Enter address (optional): ") or ""
+                first_name = input("Enter first name: ").strip()
+                last_name = input("Enter last name: ").strip()
+                phone_number = input("Enter phone number: ").strip()
+                email_address = input("Enter email address (or press Enter to skip): ").strip() or ""
+                while not self.is_valid_email(email_address):
+                    email_address = input("Invalid email address. Please try again: ").strip() or ""
+                address = input("Enter address (or press Enter to skip): ").strip() or ""
 
                 new_contact = Contact(first_name, last_name, phone_number, email_address, address)
                 self.contacts.append(new_contact)
@@ -180,7 +190,14 @@ class PhoneBook:
                 print('\n')
                 continue
 
-            new_value = input("Enter the new value: ").strip()
+            new_value = input("Enter the new value: ").strip() or ""
+            if (field_index in ['1', '2', '3']):
+                while new_value == "":
+                    new_value = input("Mandatory field. Please enter a valid value: ").strip()
+            if (field_index == '4'):
+                while not self.is_valid_email(new_value):
+                    new_value = input("Invalid email address. Please try again (or press Enter to delete previous email address): ").strip()
+            
             print('\n')
 
             if field_index == '1':
