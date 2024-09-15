@@ -20,6 +20,14 @@ class PhoneBook:
         rows = [[contact.get_first_name(), contact.get_last_name(), contact.get_phone_number(), 
                  contact.get_email_address(), contact.get_address()] for contact in self.contacts]
         print(tabulate(rows, headers=headers, tablefmt="grid"))
+        print("\n")
+    
+    def print_contact(self, contact):
+        headers = ["First Name", "Last Name", "Phone Number", "Email Address", "Address"]
+        rows = [[contact.get_first_name(), contact.get_last_name(), contact.get_phone_number(), 
+                 contact.get_email_address(), contact.get_address()]]
+        print(tabulate(rows, headers=headers, tablefmt="grid"))
+        print("\n")
 
     def create_contact(self):
         while True:
@@ -96,7 +104,7 @@ class PhoneBook:
                     headers = ["First Name", "Last Name", "Phone Number", "Email Address", "Address"]
                     rows = [[contact.get_first_name(), contact.get_last_name(), contact.get_phone_number(), 
                             contact.get_email_address(), contact.get_address()] for contact in matches]
-                    print(tabulate(rows, headers=headers, tablefmt="grid"))
+                    print(tabulate(rows, headers=headers, tablefmt="grid", showindex="always"))
                     print("\n")
                 else:
                     print("No contact meets the requirement.\n")
@@ -108,8 +116,89 @@ class PhoneBook:
             else:
                 print("Invalid choice. Please try again.\n")
 
+    def update_contact(self):
+        while True:
+            search_query = input("Enter the name of the contact to be updated (or -1 to exit): ").strip().lower()
+
+            if search_query == '-1':
+                print('\n')
+                break
+
+            matches = []
+            for contact in self.contacts:
+                full_name = f"{contact.get_first_name()} {contact.get_last_name()}".lower()
+                if search_query in full_name:
+                    matches.append(contact)
+
+            if not matches:
+                print("No contact matches the query. Please try again.")
+                continue
+
+            # add helper function to print contact list
+            headers = ["First Name", "Last Name", "Phone Number", "Email Address", "Address"]
+            rows = [[contact.get_first_name(), contact.get_last_name(), contact.get_phone_number(), 
+                    contact.get_email_address(), contact.get_address()] for contact in matches]
+            print(tabulate(rows, headers=headers, tablefmt="grid", showindex="always"))
+
+            if len(matches) > 1:
+                index = -2
+                while index < -1 or index >= len(matches):
+                    try:
+                        index = int(input("Enter the index of the contact to update (or -1 to exit): ").strip())
+                        if index < -1 or index >= len(matches):
+                            print("Invalid index. Please try again.")
+                    except ValueError:
+                        print("Invalid index. Please try again.")
+                if index == -1:
+                    print('\n')
+                    continue
+                contact_to_update = matches[index]
+            else:
+                choice = ''
+                while choice not in ['-1', '1']:
+                    choice = input("Do you want to update this contact? Enter 1 to update or -1 to exit: ").strip().lower()
+                if choice == '-1':
+                    print('\n')
+                    continue
+                contact_to_update = matches[0]
+
+            print("\nThe contact to update is:")
+            self.print_contact(contact_to_update)
+
+            print("Which field do you want to update?")
+            print("1. First Name")
+            print("2. Last Name")
+            print("3. Phone Number")
+            print("4. Email Address")
+            print("5. Address")
+            field_index = input("Enter the index of the field to update (or -1 to exit): ").strip()
+
+            while field_index not in ['-1', '1', '2', '3', '4', '5']:
+                field_index = input("Invalid index. Please try again: ").strip()
+
+            if field_index == '-1':
+                print('\n')
+                continue
+
+            new_value = input("Enter the new value: ").strip()
+            print('\n')
+
+            if field_index == '1':
+                contact_to_update.set_first_name(new_value)
+            elif field_index == '2':
+                contact_to_update.set_last_name(new_value)
+            elif field_index == '3':
+                contact_to_update.set_phone_number(new_value)
+            elif field_index == '4':
+                contact_to_update.set_email_address(new_value)
+            elif field_index == '5':
+                contact_to_update.set_address(new_value)
+
+            print("The contact is now: ")
+            self.print_contact(contact_to_update)
 
 phone_book = PhoneBook()
 phone_book.create_contact()
 phone_book.print_contacts()
-phone_book.find_contact()
+#phone_book.find_contact()
+phone_book.update_contact()
