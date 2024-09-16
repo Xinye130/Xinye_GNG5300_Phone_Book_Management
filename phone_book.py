@@ -181,7 +181,6 @@ class PhoneBook:
             if matches:
                 print("\nHere are the contacts that meet the requirement:")
                 self.print_contact_list(matches, True, show_create_time)
-                print("\n")
             else:
                 print("No contact meets the requirement.\n")
                 continue
@@ -200,6 +199,8 @@ class PhoneBook:
             contact_to_view = matches[index]
 
             print("\nHistory of changes:")
+            contact_to_view.print_history()
+            print("\n")
 
     def search_contacts_by_date(self):
         print("\nSearch contacts by date (inclusively):")
@@ -314,7 +315,6 @@ class PhoneBook:
                         new_value = input("Invalid email address. Please try again (or press Enter to delete previous email address): ").strip()
                 print('\n')
 
-                # if possible add confirm whether to update
                 if field_index == '1':
                     contact_to_update.set_first_name(new_value)
                 elif field_index == '2':
@@ -508,6 +508,7 @@ class PhoneBook:
 phone_book = PhoneBook()
 phone_book.create_contact()
 phone_book.print_all_contacts()
+phone_book.update_contact()
 phone_book.search_contact()
 #phone_book.update_contact()
 #phone_book.delete_contact()
