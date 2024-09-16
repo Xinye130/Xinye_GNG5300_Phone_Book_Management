@@ -2,6 +2,7 @@ from contact import Contact
 from tabulate import tabulate
 import csv
 import re
+from datetime import datetime
 
 class PhoneBook:
     def __init__(self):
@@ -25,11 +26,25 @@ class PhoneBook:
         print(tabulate(rows, headers=headers, tablefmt="grid"))
         print("\n")
 
-    def print_contact_list(self, contacts):
+    def print_contact_list(self, contacts, show_index=True, show_create_time=False, show_update_time=False):
         headers = ["First Name", "Last Name", "Phone Number", "Email Address", "Address"]
+        if show_create_time:
+            headers.append("Create Time")
+            rows = [[contact.get_first_name(), contact.get_last_name(), contact.get_phone_number(), 
+                 contact.get_email_address(), contact.get_address(), contact.get_create_time()] for contact in contacts]
+            print(tabulate(rows, headers=headers, tablefmt="grid", showindex = show_index))
+            return
+        
+        if show_update_time:
+            headers.append("Update Time")
+            rows = [[contact.get_first_name(), contact.get_last_name(), contact.get_phone_number(), 
+                 contact.get_email_address(), contact.get_address(), contact.get_update_time()] for contact in contacts]
+            print(tabulate(rows, headers=headers, tablefmt="grid", showindex = show_index))
+            return
+        
         rows = [[contact.get_first_name(), contact.get_last_name(), contact.get_phone_number(), 
                  contact.get_email_address(), contact.get_address()] for contact in contacts]
-        print(tabulate(rows, headers=headers, tablefmt="grid", showindex="always"))
+        print(tabulate(rows, headers=headers, tablefmt="grid", showindex = show_index))
     
     def is_valid_email(self, email):
         if email == "":
@@ -335,10 +350,71 @@ class PhoneBook:
             else:
                 print("Invalid choice. Please try again.\n")
 
+    def sort_contacts(self):
+        while True:
+            print("Do you want to sort contacts by:")
+            print("1. First Name")
+            print("2. Last Name")
+            print("3. Phone Number")
+            print("4. Create Time")
+            print("5. Update Time")
+            print("Or enter -1 to quit.")
+            sort_choice = input("Enter your choice (1/2/3/4/5/-1): ").strip()
+
+            while sort_choice not in ['1', '2', '3', '4', '5', '-1']:
+                sort_choice = input("Invalid choice. Please enter a valid option: ").strip()
+
+            if sort_choice == '-1':
+                print("Exiting.\n")
+                return
+
+            print("\nSelect a sort order:")
+            if sort_choice in ['1', '2']:
+                print("1. Alphabetically Up")
+                print("2. Alphabetically Down")
+            elif sort_choice in ['3']:
+                print("1. Numerically Up")
+                print("2. Numerically Down")
+            else:
+                print("1. Oldest first")
+                print("2. Latest first")
+            order_choice = input("Enter your choice (1/2): ").strip()
+
+            while order_choice not in ['1', '2']:
+                order_choice = input("Invalid choice. Please enter a valid option: ").strip()
+
+            reverse = (order_choice == '2')
+            show_create_time = (sort_choice == '4')
+            show_update_time = (sort_choice == '5')
+
+            if sort_choice == '1':
+                self.contacts.sort(key=lambda contact: contact.get_first_name().lower(), reverse=reverse)
+            elif sort_choice == '2':
+                self.contacts.sort(key=lambda contact: contact.get_last_name().lower(), reverse=reverse)
+            elif sort_choice == '3':
+                self.contacts.sort(key=lambda contact: int(re.sub(r'\D', '', contact.get_phone_number())), reverse=reverse)
+            elif sort_choice == '4':
+                self.contacts.sort(key=lambda contact: contact.get_create_time(), reverse=reverse)
+            elif sort_choice == '5':
+                self.contacts.sort(key=lambda contact: contact.get_update_time(), reverse=reverse)
+
+            print("\nContacts sorted successfully. Here are the first few contacts: ")
+            self.print_contact_list(self.contacts[:5], False, show_create_time, show_update_time)
+
+            show_more = input("Do you want to see the whole list? Enter 1 to show more or -1 to exit: ").strip()
+            while show_more not in ['1', '-1']:
+                show_more = input("Invalid choice. Please enter 1 or -1: ").strip()
+            
+            if show_more == '1':
+                self.print_contact_list(self.contacts[5:], False, show_create_time, show_update_time)
+            
+            print("\n")
+
 phone_book = PhoneBook()
 phone_book.create_contact()
 phone_book.print_all_contacts()
 #phone_book.search_contact()
-#phone_book.update_contact()
+phone_book.update_contact()
 #phone_book.delete_contact()
 #phone_book.print_all_contacts()
+phone_book.sort_contacts()
