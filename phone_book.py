@@ -18,14 +18,14 @@ class PhoneBook:
         rows = [[contact.get_first_name(), contact.get_last_name(), contact.get_phone_number(), 
                  contact.get_email_address(), contact.get_address()] for contact in self.contacts]
         print(tabulate(rows, headers=headers, tablefmt="grid"))
-        print("\n")
+        print()
     
     def print_contact(self, contact):
         headers = ["First Name", "Last Name", "Phone Number", "Email Address", "Address"]
         rows = [[contact.get_first_name(), contact.get_last_name(), contact.get_phone_number(), 
                  contact.get_email_address(), contact.get_address()]]
         print(tabulate(rows, headers=headers, tablefmt="grid"))
-        print("\n")
+        print()
 
     def print_contact_list(self, contacts, show_index=True, show_create_time=False, show_update_time=False):
         headers = ["First Name", "Last Name", "Phone Number", "Email Address", "Address"]
@@ -194,13 +194,13 @@ class PhoneBook:
                 except ValueError:
                     print("Invalid index. Please try again.\n")
             if index == -1:
-                print('\n')
+                print()
                 continue
             contact_to_view = matches[index]
 
             print("\nHistory of changes:")
             contact_to_view.print_history()
-            print("\n")
+            print()
 
     def search_contacts_by_date(self):
         print("\nSearch contacts by date (inclusively):")
@@ -243,10 +243,11 @@ class PhoneBook:
 
     def update_contact(self):
         while True:
+            print("Update contact")
             search_query = self.input_mandatory_field(input("Enter the name of the contact to be updated (or q to quit): ").strip())
 
             if search_query == 'q':
-                print('\n')
+                print()
                 break
 
             matches = []
@@ -262,27 +263,18 @@ class PhoneBook:
             else:
                 self.print_contact_list(matches)
 
-            if len(matches) > 1:
-                index = -2
-                while index < -1 or index >= len(matches):
-                    try:
-                        index = int(input("Enter the index of the contact to update (or -1 to quit): ").strip())
-                        if index < -1 or index >= len(matches):
-                            print("Invalid index. Please try again.\n")
-                    except ValueError:
+            index = -2
+            while index < -1 or index >= len(matches):
+                try:
+                    index = int(input("Enter the index of the contact to update (or -1 to quit): ").strip())
+                    if index < -1 or index >= len(matches):
                         print("Invalid index. Please try again.\n")
-                if index == -1:
-                    print('\n')
-                    continue
-                contact_to_update = matches[index]
-            else:
-                choice = ''
-                while choice not in ['q', '1']:
-                    choice = input("Do you want to update this contact? Enter 1 to update or q to quit: ").strip().lower()
-                if choice == 'q':
-                    print('\n')
-                    continue
-                contact_to_update = matches[0]
+                except ValueError:
+                    print("Invalid index. Please try again.\n")
+            if index == -1:
+                print()
+                continue
+            contact_to_update = matches[index]
 
             print("\nThe contact to update is:")
             self.print_contact(contact_to_update)
@@ -301,7 +293,7 @@ class PhoneBook:
                     field_index = input("Invalid index. Please try again: ").strip()
 
                 if field_index == 'q':
-                    print('\n')
+                    print()
                     break
 
                 new_value = input("Enter the new value: ").strip()
@@ -313,7 +305,7 @@ class PhoneBook:
                 if (field_index == '4'):
                     while not self.is_valid_email(new_value):
                         new_value = input("Invalid email address. Please try again (or press Enter to delete previous email address): ").strip()
-                print('\n')
+                print()
 
                 if field_index == '1':
                     contact_to_update.set_first_name(new_value)
@@ -366,7 +358,7 @@ class PhoneBook:
                             except ValueError:
                                 print("Invalid index. Please try again.")
                         if index == -1:
-                            print('\n')
+                            print()
                             continue
                         contact_to_delete = matches[index]
                     else:
@@ -374,7 +366,7 @@ class PhoneBook:
                         while choice not in ['q', '1']:
                             choice = input("Do you want to delete this contact? Enter 1 to delete or q to quit: ").strip().lower()
                         if choice == 'q':
-                            print('\n')
+                            print()
                             continue
                         contact_to_delete = matches[0]
                     
@@ -470,7 +462,7 @@ class PhoneBook:
             if show_more == '1':
                 self.print_contact_list(self.contacts[5:], False, show_create_time, show_update_time)
             
-            print("\n")
+            print()
 
     def group_contacts(self):
         print("Group contacts by:")
@@ -503,7 +495,7 @@ class PhoneBook:
                         contact.get_email_address(), contact.get_address()] for contact in contacts]
             print(tabulate(rows, headers=headers, tablefmt="grid"))
         
-        print("\n")
+        print()
 
 phone_book = PhoneBook()
 phone_book.create_contact()
@@ -521,7 +513,6 @@ phone_book.search_contact()
 Todo:
 - Check for duplicated contacts
 - Recording all operations performed in the application along with timestamps
-- Enabling users to view a history of changes made to individual contacts
 - (Exporting to csv)
 
 - Application script
