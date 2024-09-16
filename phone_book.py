@@ -143,7 +143,7 @@ class PhoneBook:
 
     def search_contact(self):
         while True:
-            print("Do you want to search by:")
+            print("Search contacts by:")
             print("1. Full name")
             print("2. Telephone number")
             print("3. Date created")
@@ -157,9 +157,10 @@ class PhoneBook:
                 print("Quiting.\n")
                 break
 
+            matches = []
+            show_create_time = False
             if search_type in ['1', '2']:
                 search_query = self.input_mandatory_field(input("Enter the search query: ").strip()) 
-                matches = []
 
                 for contact in self.contacts:
                     if search_type == '1':
@@ -172,16 +173,33 @@ class PhoneBook:
                         phone_number = re.sub(r'\D', '', contact.get_phone_number())
                         if query_number in phone_number:
                             matches.append(contact)
-
-                if matches:
-                    print("\nHere are the contacts that meet the requirement:")
-                    self.print_contact_list(matches)
-                    print("\n")
-                else:
-                    print("No contact meets the requirement.\n")
             
             elif search_type == '3':
-                self.search_contacts_by_date()
+                matches = self.search_contacts_by_date()
+                show_create_time = True
+
+            if matches:
+                print("\nHere are the contacts that meet the requirement:")
+                self.print_contact_list(matches, True, show_create_time)
+                print("\n")
+            else:
+                print("No contact meets the requirement.\n")
+                continue
+
+            index = -2
+            while index < -1 or index >= len(matches):
+                try:
+                    index = int(input("View history of changes by entering contact index (or -1 to quit): ").strip())
+                    if index < -1 or index >= len(matches):
+                        print("Invalid index. Please try again.\n")
+                except ValueError:
+                    print("Invalid index. Please try again.\n")
+            if index == -1:
+                print('\n')
+                continue
+            contact_to_view = matches[index]
+
+            print("\nHistory of changes:")
 
     def search_contacts_by_date(self):
         print("\nSearch contacts by date (inclusively):")
@@ -189,12 +207,13 @@ class PhoneBook:
         print("Or enter 'q' to quit.")
         dates = input("Enter: ").strip().split()
 
+        matches = []
         is_valid_date = False
         while not is_valid_date:
             if len(dates) == 1:
                 if dates[0] == 'q':
                     print("Quiting.\n")
-                    return
+                    return matches
                 
                 try:
                     start_date = datetime.strptime(dates[0], '%Y-%m-%d').date()
@@ -214,18 +233,12 @@ class PhoneBook:
             else:
                 dates = input("Invalid date format. Please try again: ").strip().split()
 
-        matches = []
         for contact in self.contacts:
             create_time = contact.get_create_time().date()
             if start_date <= create_time <= end_date:
                 matches.append(contact)
-
-        if matches:
-            print("\nHere are the contacts found within the specified date range:")
-            self.print_contact_list(matches, False, True)
-            print("\n")
-        else:
-            print("No contacts found within the specified date range.\n")
+        
+        return matches
 
     def update_contact(self):
         while True:
@@ -243,10 +256,10 @@ class PhoneBook:
                     matches.append(contact)
 
             if not matches:
-                print("No contact matches the query. Please try again.")
+                print("No contact matches the query. Please try again.\n")
                 continue
-
-            self.print_contact_list(matches)
+            else:
+                self.print_contact_list(matches)
 
             if len(matches) > 1:
                 index = -2
@@ -254,9 +267,9 @@ class PhoneBook:
                     try:
                         index = int(input("Enter the index of the contact to update (or -1 to quit): ").strip())
                         if index < -1 or index >= len(matches):
-                            print("Invalid index. Please try again.")
+                            print("Invalid index. Please try again.\n")
                     except ValueError:
-                        print("Invalid index. Please try again.")
+                        print("Invalid index. Please try again.\n")
                 if index == -1:
                     print('\n')
                     continue
