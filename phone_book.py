@@ -55,11 +55,11 @@ class PhoneBook:
  
     def create_contact(self):
         while True:
-            print("Select an option:")
+            print("How would you like to add contacts:")
             print("1. Add contact manually")
             print("2. Import contacts from CSV")
-            print("3. Exit")
-            choice = input("Enter your choice (1/2/3): ")
+            print("Or enter -1 to exit.")
+            choice = input("Enter your choice (1/2/-1): ")
 
             if choice == '1':
                 first_name = self.input_mandatory_field(input("Enter first name: ").strip())
@@ -95,7 +95,7 @@ class PhoneBook:
                 except FileNotFoundError:
                     print("CSV file not found. Please try again.\n")
 
-            elif choice == '3':
+            elif choice == '-1':
                 print("Exiting.\n")
                 break
 
@@ -107,8 +107,8 @@ class PhoneBook:
             print("Do you want to search by:")
             print("1. Full name")
             print("2. Telephone number")
-            print("Or enter 3 to exit.")
-            search_type = input("Enter your choice (1/2/3): ").strip()
+            print("Or enter -1 to exit.")
+            search_type = input("Enter your choice (1/2/-1): ").strip()
 
             if search_type in ['1', '2']:
                 search_query = self.input_mandatory_field(input("Enter the search query: ").strip()) 
@@ -133,7 +133,7 @@ class PhoneBook:
                 else:
                     print("No contact meets the requirement.\n")
             
-            elif search_type == '3':
+            elif search_type == '-1':
                 print("Exiting.\n")
                 break
 
@@ -231,7 +231,7 @@ class PhoneBook:
     
     def delete_contact(self):
         while True:
-            print("Do you want to delete contacts manually or batch delete from CSV?")
+            print("How would you like to delete contacts:")
             print("1. Delete manually")
             print("2. Batch delete from CSV")
             print("Or enter -1 to exit.")
@@ -242,17 +242,45 @@ class PhoneBook:
                 break
 
             elif choice == '1':
-                name_to_delete = input("Enter the full name of the contact to delete: ").strip().lower()
-                found = False
+                delete_query = self.input_mandatory_field(input("Enter the name of the contact to delete: ").strip())
+
+                matches = []
                 for contact in self.contacts:
-                    full_name = f"{contact.get_first_name()} {contact.get_last_name()}".lower()
-                    if full_name == name_to_delete:
-                        self.contacts.remove(contact)
-                        print(f"Contact deleted: {full_name}")
-                        found = True
-                        break
-                if not found:
-                    print(f"Contact '{name_to_delete}' not found.\n")
+                    query_name = ''.join(delete_query.lower().split())
+                    full_name = ''.join(f"{contact.get_first_name()} {contact.get_last_name()}".lower().split())
+                    if query_name in full_name:
+                        matches.append(contact)
+
+                if not matches:
+                    print(f"Contact '{delete_query}' not found.\n")
+                else:
+                    self.print_contact_list(matches)
+
+                    if len(matches) > 1:
+                        index = -2
+                        while index < -1 or index >= len(matches):
+                            try:
+                                index = int(input("Enter the index of the contact to delete (or -1 to exit): ").strip())
+                                if index < -1 or index >= len(matches):
+                                    print("Invalid index. Please try again.")
+                            except ValueError:
+                                print("Invalid index. Please try again.")
+                        if index == -1:
+                            print('\n')
+                            continue
+                        contact_to_delete = matches[index]
+                    else:
+                        choice = ''
+                        while choice not in ['-1', '1']:
+                            choice = input("Do you want to delete this contact? Enter 1 to delete or -1 to exit: ").strip().lower()
+                        if choice == '-1':
+                            print('\n')
+                            continue
+                        contact_to_delete = matches[0]
+                    
+                    delete_name = f"{contact_to_delete.get_first_name()} {contact_to_delete.get_last_name()}"
+                    self.contacts.remove(contact_to_delete)
+                    print(f"Contact deleted: {delete_name}\n")
 
             elif choice == '2':
                 csv_file = input("Enter the path to the CSV file: ").strip()
@@ -263,20 +291,20 @@ class PhoneBook:
                         successful_deletions = 0
                         for row in reader:
                             if row:
-                                full_name = row[0].strip().lower()
+                                full_name = row[0].strip()
                                 if full_name:
                                     attempted_deletions += 1
                                     found = False
                                     for contact in self.contacts:
-                                        contact_full_name = f"{contact.get_first_name()} {contact.get_last_name()}".lower()
+                                        contact_full_name = f"{contact.get_first_name()} {contact.get_last_name()}"
                                         if contact_full_name == full_name:
                                             self.contacts.remove(contact)
-                                            print(f"Contact deleted: {full_name}")
+                                            print(f"[Succeeded] Contact deleted: {contact_full_name}")
                                             successful_deletions += 1
                                             found = True
                                             break
                                     if not found:
-                                        print(f"Contact '{full_name}' not found.")
+                                        print(f"[Failed] Contact '{full_name}' not found.")
                         print(f"Batch delete completed: {successful_deletions}/{attempted_deletions} contacts deleted successfully.\n")
                 except FileNotFoundError:
                     print("CSV file not found. Please try again.\n")
