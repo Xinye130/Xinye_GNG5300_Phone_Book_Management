@@ -69,8 +69,8 @@ class PhoneBook:
             print("How would you like to add contacts:")
             print("1. Add contact manually")
             print("2. Import contacts from CSV")
-            print("Or enter -1 to exit.")
-            choice = input("Enter your choice (1/2/-1): ")
+            print("Or enter q to quit.")
+            choice = input("Enter your choice (1/2/q): ")
 
             if choice == '1':
                 first_name = self.input_mandatory_field(input("Enter first name: ").strip())
@@ -133,8 +133,8 @@ class PhoneBook:
                 except FileNotFoundError:
                     print("CSV file not found. Please try again.\n")
 
-            elif choice == '-1':
-                print("Exiting.\n")
+            elif choice == 'q':
+                print("Quiting.\n")
                 break
 
             else:
@@ -145,8 +145,8 @@ class PhoneBook:
             print("Do you want to search by:")
             print("1. Full name")
             print("2. Telephone number")
-            print("Or enter -1 to exit.")
-            search_type = input("Enter your choice (1/2/-1): ").strip()
+            print("Or enter q to quit.")
+            search_type = input("Enter your choice (1/2/q): ").strip()
 
             if search_type in ['1', '2']:
                 search_query = self.input_mandatory_field(input("Enter the search query: ").strip()) 
@@ -171,8 +171,8 @@ class PhoneBook:
                 else:
                     print("No contact meets the requirement.\n")
             
-            elif search_type == '-1':
-                print("Exiting.\n")
+            elif search_type == 'q':
+                print("Quiting.\n")
                 break
 
             else:
@@ -180,9 +180,9 @@ class PhoneBook:
 
     def update_contact(self):
         while True:
-            search_query = self.input_mandatory_field(input("Enter the name of the contact to be updated (or -1 to exit): ").strip())
+            search_query = self.input_mandatory_field(input("Enter the name of the contact to be updated (or q to quit): ").strip())
 
-            if search_query == '-1':
+            if search_query == 'q':
                 print('\n')
                 break
 
@@ -203,7 +203,7 @@ class PhoneBook:
                 index = -2
                 while index < -1 or index >= len(matches):
                     try:
-                        index = int(input("Enter the index of the contact to update (or -1 to exit): ").strip())
+                        index = int(input("Enter the index of the contact to update (or -1 to quit): ").strip())
                         if index < -1 or index >= len(matches):
                             print("Invalid index. Please try again.")
                     except ValueError:
@@ -214,9 +214,9 @@ class PhoneBook:
                 contact_to_update = matches[index]
             else:
                 choice = ''
-                while choice not in ['-1', '1']:
-                    choice = input("Do you want to update this contact? Enter 1 to update or -1 to exit: ").strip().lower()
-                if choice == '-1':
+                while choice not in ['q', '1']:
+                    choice = input("Do you want to update this contact? Enter 1 to update or q to quit: ").strip().lower()
+                if choice == 'q':
                     print('\n')
                     continue
                 contact_to_update = matches[0]
@@ -225,19 +225,19 @@ class PhoneBook:
             self.print_contact(contact_to_update)
 
             field_index = 'invalid'
-            while not field_index == '-1':
+            while not field_index == 'q':
                 print("Which field do you want to update?")
                 print("1. First Name")
                 print("2. Last Name")
                 print("3. Phone Number")
                 print("4. Email Address")
                 print("5. Address")
-                field_index = input("Enter the index of the field to update (or -1 to exit): ").strip()
+                field_index = input("Enter the index of the field to update (or q to quit): ").strip()
 
-                while field_index not in ['-1', '1', '2', '3', '4', '5']:
+                while field_index not in ['q', '1', '2', '3', '4', '5']:
                     field_index = input("Invalid index. Please try again: ").strip()
 
-                if field_index == '-1':
+                if field_index == 'q':
                     print('\n')
                     break
 
@@ -272,11 +272,11 @@ class PhoneBook:
             print("How would you like to delete contacts:")
             print("1. Delete manually")
             print("2. Batch delete from CSV")
-            print("Or enter -1 to exit.")
-            choice = input("Enter your choice (1/2/-1): ").strip()
+            print("Or enter q to quit.")
+            choice = input("Enter your choice (1/2/q): ").strip()
 
-            if choice == '-1':
-                print("Exiting.\n")
+            if choice == 'q':
+                print("Quiting.\n")
                 break
 
             elif choice == '1':
@@ -298,7 +298,7 @@ class PhoneBook:
                         index = -2
                         while index < -1 or index >= len(matches):
                             try:
-                                index = int(input("Enter the index of the contact to delete (or -1 to exit): ").strip())
+                                index = int(input("Enter the index of the contact to delete (or -1 to quit): ").strip())
                                 if index < -1 or index >= len(matches):
                                     print("Invalid index. Please try again.")
                             except ValueError:
@@ -309,9 +309,9 @@ class PhoneBook:
                         contact_to_delete = matches[index]
                     else:
                         choice = ''
-                        while choice not in ['-1', '1']:
-                            choice = input("Do you want to delete this contact? Enter 1 to delete or -1 to exit: ").strip().lower()
-                        if choice == '-1':
+                        while choice not in ['q', '1']:
+                            choice = input("Do you want to delete this contact? Enter 1 to delete or q to quit: ").strip().lower()
+                        if choice == 'q':
                             print('\n')
                             continue
                         contact_to_delete = matches[0]
@@ -358,14 +358,14 @@ class PhoneBook:
             print("3. Phone Number")
             print("4. Create Time")
             print("5. Update Time")
-            print("Or enter -1 to quit.")
-            sort_choice = input("Enter your choice (1/2/3/4/5/-1): ").strip()
+            print("Or enter q to quit.")
+            sort_choice = input("Enter your choice (1/2/3/4/5/q): ").strip()
 
-            while sort_choice not in ['1', '2', '3', '4', '5', '-1']:
+            while sort_choice not in ['1', '2', '3', '4', '5', 'q']:
                 sort_choice = input("Invalid choice. Please enter a valid option: ").strip()
 
-            if sort_choice == '-1':
-                print("Exiting.\n")
+            if sort_choice == 'q':
+                print("Quiting.\n")
                 return
 
             print("\nSelect a sort order:")
@@ -401,9 +401,9 @@ class PhoneBook:
             print("\nContacts sorted successfully. Here are the first few contacts: ")
             self.print_contact_list(self.contacts[:5], False, show_create_time, show_update_time)
 
-            show_more = input("Do you want to see the whole list? Enter 1 to show more or -1 to exit: ").strip()
-            while show_more not in ['1', '-1']:
-                show_more = input("Invalid choice. Please enter 1 or -1: ").strip()
+            show_more = input("Do you want to see the whole list? Enter 1 to show more or q to quit: ").strip()
+            while show_more not in ['1', 'q']:
+                show_more = input("Invalid choice. Please enter 1 or q: ").strip()
             
             if show_more == '1':
                 self.print_contact_list(self.contacts[5:], False, show_create_time, show_update_time)
