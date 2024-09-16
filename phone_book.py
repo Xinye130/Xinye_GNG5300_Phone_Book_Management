@@ -3,6 +3,7 @@ from tabulate import tabulate
 import csv
 import re
 from collections import defaultdict
+from datetime import datetime
 
 class PhoneBook:
     def __init__(self):
@@ -145,8 +146,16 @@ class PhoneBook:
             print("Do you want to search by:")
             print("1. Full name")
             print("2. Telephone number")
+            print("3. Date created")
             print("Or enter q to quit.")
-            search_type = input("Enter your choice (1/2/q): ").strip()
+            search_type = input("Enter your choice (1/2/3/q): ").strip()
+
+            while search_type not in ['1', '2', '3', 'q']:
+                search_type = input("Invalid choice. Please enter a valid option: ").strip()
+            
+            if search_type == 'q':
+                print("Quiting.\n")
+                break
 
             if search_type in ['1', '2']:
                 search_query = self.input_mandatory_field(input("Enter the search query: ").strip()) 
@@ -165,18 +174,58 @@ class PhoneBook:
                             matches.append(contact)
 
                 if matches:
-                    print("Here are the contacts that meet the requirement:")
+                    print("\nHere are the contacts that meet the requirement:")
                     self.print_contact_list(matches)
                     print("\n")
                 else:
                     print("No contact meets the requirement.\n")
             
-            elif search_type == 'q':
-                print("Quiting.\n")
-                break
+            elif search_type == '3':
+                self.search_contacts_by_date()
 
+    def search_contacts_by_date(self):
+        print("\nSearch contacts by date (inclusively):")
+        print("Enter a single date (yyyy-mm-dd) or a date range (yyyy-mm-dd yyyy-mm-dd)")
+        print("Or enter 'q' to quit.")
+        dates = input("Enter: ").strip().split()
+
+        is_valid_date = False
+        while not is_valid_date:
+            if len(dates) == 1:
+                if dates[0] == 'q':
+                    print("Quiting.\n")
+                    return
+                
+                try:
+                    start_date = datetime.strptime(dates[0], '%Y-%m-%d').date()
+                    end_date = start_date
+                    is_valid_date = True
+                except ValueError:
+                    dates = input("Invalid date format. Please try again: ").strip().split()
+            
+            elif len(dates) == 2:
+                try:
+                    start_date = datetime.strptime(dates[0], '%Y-%m-%d').date()
+                    end_date = datetime.strptime(dates[1], '%Y-%m-%d').date()
+                    is_valid_date = True
+                except ValueError:
+                    dates = input("Invalid date format. Please try again: ").strip().split()
+            
             else:
-                print("Invalid choice. Please try again.\n")
+                dates = input("Invalid date format. Please try again: ").strip().split()
+
+        matches = []
+        for contact in self.contacts:
+            create_time = contact.get_create_time().date()
+            if start_date <= create_time <= end_date:
+                matches.append(contact)
+
+        if matches:
+            print("\nHere are the contacts found within the specified date range:")
+            self.print_contact_list(matches, False, True)
+            print("\n")
+        else:
+            print("No contacts found within the specified date range.\n")
 
     def update_contact(self):
         while True:
@@ -420,7 +469,7 @@ class PhoneBook:
             choice = input("Invalid choice. Please enter a valid option: ").strip()
 
         if choice == 'q':
-            print("Exiting.\n")
+            print("Quiting.\n")
             return
 
         # Group contacts by the first letter of last name
@@ -446,21 +495,24 @@ class PhoneBook:
 phone_book = PhoneBook()
 phone_book.create_contact()
 phone_book.print_all_contacts()
-#phone_book.search_contact()
+phone_book.search_contact()
 #phone_book.update_contact()
 #phone_book.delete_contact()
 #phone_book.print_all_contacts()
 #phone_book.sort_contacts()
-phone_book.group_contacts()
+#phone_book.group_contacts()
+#phone_book.search_contacts_by_date()
 
 '''
 Todo:
 - Check for duplicated contacts
-- Grouping by initial letter of last name
-- Filters to search for contacts added within a specific time frame
 - Recording all operations performed in the application along with timestamps
 - Enabling users to view a history of changes made to individual contacts
 - (Exporting to csv)
 
 - Application script
+
+To improve:
+- Grouping
+- Delete all
 '''
