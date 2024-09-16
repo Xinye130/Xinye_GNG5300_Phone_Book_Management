@@ -2,7 +2,7 @@ from contact import Contact
 from tabulate import tabulate
 import csv
 import re
-from datetime import datetime
+from collections import defaultdict
 
 class PhoneBook:
     def __init__(self):
@@ -410,11 +410,57 @@ class PhoneBook:
             
             print("\n")
 
+    def group_contacts(self):
+        print("Group contacts by:")
+        print("1. First letter of last name")
+        print("Or enter 'q' to quit.")
+        choice = input("Enter your choice (1/q): ").strip()
+
+        while choice not in ['1', 'q']:
+            choice = input("Invalid choice. Please enter a valid option: ").strip()
+
+        if choice == 'q':
+            print("Exiting.\n")
+            return
+
+        # Group contacts by the first letter of last name
+        grouped_contacts = defaultdict(list)
+        for contact in self.contacts:
+            first_letter = contact.get_last_name()[0].upper()
+            grouped_contacts[first_letter].append(contact)
+
+        # Sort the dictionary by keys alphabetically (first letters)
+        sorted_grouped_contacts = dict(sorted(grouped_contacts.items()))
+
+        print("\nContacts grouped successfully. Displaying groups:")
+        # Print each group of contacts
+        for letter, contacts in sorted_grouped_contacts.items():
+            print(f"{letter}")
+            headers = ["First Name", "Last Name", "Phone Number", "Email Address", "Address"]
+            rows = [[contact.get_first_name(), contact.get_last_name(), contact.get_phone_number(), 
+                        contact.get_email_address(), contact.get_address()] for contact in contacts]
+            print(tabulate(rows, headers=headers, tablefmt="grid"))
+        
+        print("\n")
+
 phone_book = PhoneBook()
 phone_book.create_contact()
 phone_book.print_all_contacts()
 #phone_book.search_contact()
-phone_book.update_contact()
+#phone_book.update_contact()
 #phone_book.delete_contact()
 #phone_book.print_all_contacts()
-phone_book.sort_contacts()
+#phone_book.sort_contacts()
+phone_book.group_contacts()
+
+'''
+Todo:
+- Check for duplicated contacts
+- Grouping by initial letter of last name
+- Filters to search for contacts added within a specific time frame
+- Recording all operations performed in the application along with timestamps
+- Enabling users to view a history of changes made to individual contacts
+- (Exporting to csv)
+
+- Application script
+'''
