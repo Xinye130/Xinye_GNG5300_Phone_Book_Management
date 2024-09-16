@@ -3,10 +3,6 @@ from tabulate import tabulate
 import csv
 import re
 
-#contact = contact.Contact("John", "Doe", "555-555-5555", "", "")
-
-#print(contact.get_update_time())
-
 class PhoneBook:
     def __init__(self):
         self.contacts = []
@@ -77,21 +73,48 @@ class PhoneBook:
                 print(f"Contact added: {first_name} {last_name}, {phone_number}, {email_address}, {address}\n")
 
             elif choice == '2':
-                # add validate phone number, email, and madatory fields
-                # only add qualified contacts, output error, output succeeded number
                 csv_file = input("Enter the path to the CSV file: ")
                 try:
                     with open(csv_file, newline='') as file:
                         reader = csv.reader(file)
+                        attempted_additions = 0
+                        successful_additions = 0
                         for row in reader:
-                            if len(row) >= 3:
-                                first_name, last_name, phone_number = row[:3]
-                                email_address = row[3] if len(row) > 3 else ""
-                                address = row[4] if len(row) > 4 else ""
+                            attempted_additions += 1
+                            first_name = row[0].strip() if row else ""
+                            last_name = row[1].strip() if len(row) > 1 else ""
+                            phone_number = row[2].strip() if len(row) > 2 else ""
+                            email_address = row[3] if len(row) > 3 else ""
+                            address = row[4] if len(row) > 4 else ""
+
+                            # Check for mandatory fields, validate phone number and email
+                            is_valid = True
+                            error_message = f"[Failed] Contact {attempted_additions} not added: "
+                            if not first_name:
+                                is_valid = False
+                                error_message += "First name missing. "
+                            if not last_name: 
+                                is_valid = False
+                                error_message += "Last name missing. "
+                            if not phone_number:
+                                is_valid = False
+                                error_message += "Phone number missing. "
+                            if phone_number and not self.is_valid_phone_number(phone_number):
+                                is_valid = False
+                                error_message += "Phone number invalid, should be in format (###) ###-####. "
+                            if email_address and not self.is_valid_email(email_address):
+                                is_valid = False
+                                error_message += "Email address invalid. "
+                            # Add check duplicated contacts
+                            
+                            if is_valid:
+                                successful_additions += 1
                                 new_contact = Contact(first_name, last_name, phone_number, email_address, address)
                                 self.contacts.append(new_contact)
-                                print(f"Contact added: {first_name} {last_name}, {phone_number}, {email_address}, {address}")
-                        print("Contacts imported successfully from CSV.\n")
+                                print(f"[Succeeded] Contact {attempted_additions} added: {first_name} {last_name}, {phone_number}, {email_address}, {address}")
+                            else:
+                                print(error_message)
+                        print(f"Batch addition completed: {successful_additions}/{attempted_additions} contacts added successfully.\n")
                 except FileNotFoundError:
                     print("CSV file not found. Please try again.\n")
 
@@ -317,5 +340,5 @@ phone_book.create_contact()
 phone_book.print_all_contacts()
 #phone_book.search_contact()
 #phone_book.update_contact()
-phone_book.delete_contact()
-phone_book.print_all_contacts()
+#phone_book.delete_contact()
+#phone_book.print_all_contacts()
