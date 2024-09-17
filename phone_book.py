@@ -209,7 +209,7 @@ class PhoneBook:
                 except ValueError:
                     print("Invalid index. Please try again.\n")
             if index == -1:
-                print()
+                print("Quiting.\n")
                 continue
             contact_to_view = matches[index]
 
@@ -262,7 +262,7 @@ class PhoneBook:
             search_query = self.input_mandatory_field(input("Enter the name of the contact to be updated (or q to quit): ").strip())
 
             if search_query == 'q':
-                print()
+                print('Quiting.\n')
                 break
 
             matches = []
@@ -287,7 +287,7 @@ class PhoneBook:
                 except ValueError:
                     print("Invalid index. Please try again.\n")
             if index == -1:
-                print()
+                print("Quiting.\n")
                 continue
             contact_to_update = matches[index]
 
@@ -308,7 +308,7 @@ class PhoneBook:
                     field_index = input("Invalid index. Please try again: ").strip()
 
                 if field_index == 'q':
-                    print()
+                    print("Quiting.\n")
                     break
 
                 new_value = input("Enter the new value: ").strip()
@@ -382,7 +382,7 @@ class PhoneBook:
                         except ValueError:
                             print("Invalid index. Please try again.\n")
                     if index == -1:
-                        print()
+                        print("Quiting.\n")
                         continue
                     contact_to_delete = matches[index]
                     
