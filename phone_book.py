@@ -548,29 +548,14 @@ class PhoneBook:
         except json.JSONDecodeError:
             print(f"Error decoding JSON from file {file_path}.")
 
-phone_book = PhoneBook()
-phone_book.import_contacts_from_json('database.json')
-#phone_book.create_contact()
-phone_book.print_all_contacts()
-#phone_book.update_contact()
-#phone_book.search_contact()
-#phone_book.update_contact()
-phone_book.delete_contact()
-#phone_book.print_all_contacts()
-phone_book.sort_contacts()
-#phone_book.group_contacts()
-#phone_book.search_contacts_by_date()
-phone_book.export_contacts_to_json('database.json')
 
 '''
 Todo:
 - Recording all operations performed in the application along with timestamps
 - (Exporting to csv)
 
-- Application script
-
 To improve:
 - Grouping
-- Delete all
 - Confirm update
+- Prettify console output of app
 '''
