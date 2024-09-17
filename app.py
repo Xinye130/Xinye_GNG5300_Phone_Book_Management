@@ -1,6 +1,20 @@
 from phone_book import PhoneBook
+import logging
+
+def init_logging():
+    logging.basicConfig(
+        filename='example.log', 
+        encoding='utf-8',
+        format='%(asctime)s %(message)s', 
+        datefmt='%m/%d/%Y %I:%M:%S %p',
+        level=logging.DEBUG
+    )
 
 def main():
+    init_logging()
+    logger = logging.getLogger("phoneBookLogger")
+    logger.info("Starting Phone Book Management System")
+
     phone_book = PhoneBook()
 
     print("Entering phone book management system ...")
@@ -29,6 +43,7 @@ def main():
             print("Exiting the Phone Book Management System ...")
             print("Exporting contacts ...")
             phone_book.export_contacts_to_json("database.json")
+            logger.info("Exiting Phone Book Management System")
             break
         elif choice == '1':
             phone_book.print_all_contacts()

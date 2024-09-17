@@ -5,12 +5,16 @@ import json
 import re
 from collections import defaultdict
 from datetime import datetime
+import logging
 
 class PhoneBook:
+    logger = logging.getLogger("phoneBookLogger")
+
     def __init__(self):
         self.contacts = []
 
     def print_all_contacts(self):
+        self.logger.info("Printed all contacts")
         if not self.contacts:
             print("No contacts available.\n")
             return
@@ -75,6 +79,7 @@ class PhoneBook:
         return value
  
     def create_contact(self):
+        self.logger.info("Creating a new contact")
         while True:
             print("How would you like to add contacts:")
             print("1. Add contact manually")
@@ -160,6 +165,7 @@ class PhoneBook:
                 print("Invalid choice. Please try again.\n")
 
     def search_contact(self):
+        self.logger.info("Searching for contacts")
         while True:
             print("Search contacts by:")
             print("1. Full name")
@@ -260,6 +266,7 @@ class PhoneBook:
         return matches
 
     def update_contact(self):
+        self.logger.info("Updating contacts")
         while True:
             print("Update contact")
             search_query = self.input_mandatory_field(input("Enter the name of the contact to be updated (or q to quit): ").strip())
@@ -350,6 +357,7 @@ class PhoneBook:
                 self.print_contact(contact_to_update)
     
     def delete_contact(self):
+        self.logger.info("Deleting contacts")
         while True:
             print("How would you like to delete contacts:")
             print("1. Delete manually")
@@ -439,6 +447,7 @@ class PhoneBook:
         print()
 
     def sort_contacts(self):
+        self.logger.info("Sorting contacts")
         while True:
             print("Do you want to sort contacts by:")
             print("1. First Name")
@@ -499,6 +508,7 @@ class PhoneBook:
             print()
 
     def group_contacts(self):
+        self.logger.info("Grouping contacts")
         print("Group contacts by:")
         print("1. First letter of last name")
         print("Or enter 'q' to quit.")
@@ -532,12 +542,14 @@ class PhoneBook:
         print()
 
     def export_contacts_to_json(self, file_path):
+        self.logger.info("Exporting contacts to JSON")
         contacts_data = [contact.to_dict() for contact in self.contacts]
         with open(file_path, 'w') as json_file:
             json.dump(contacts_data, json_file, indent=4)
         print(f"Contacts successfully exported to {file_path}")
 
     def import_contacts_from_json(self, file_path):
+        self.logger.info("Importing contacts from JSON")
         try:
             with open(file_path, 'r') as json_file:
                 contacts_data = json.load(json_file)
