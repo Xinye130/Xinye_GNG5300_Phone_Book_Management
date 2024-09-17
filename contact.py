@@ -1,17 +1,19 @@
 import datetime
 
 class Contact:
-    def __init__(self, first_name='', last_name='', phone_number='', email_address='', address=''):
+    def __init__(self, first_name='', last_name='', phone_number='', email_address='', address='', 
+                 create_time=datetime.datetime.now(), update_time=datetime.datetime.now(), history=[]):
         self._first_name = first_name
         self._last_name = last_name
         self._phone_number = phone_number
         self._email_address = email_address
         self._address = address
-        self._create_time = datetime.datetime.now()
-        self._update_time = self._create_time
-        self._history = []
-        message = f'{first_name} {last_name}, {phone_number}, {email_address}, {address}'
-        self._history.append(Change('Created', message, '', '', '', self._create_time))
+        self._create_time = create_time
+        self._update_time = update_time
+        self._history = history[:]
+        if not self._history:
+            message = f'{first_name} {last_name}, {phone_number}, {email_address}, {address}'
+            self._history.append(Change('Created', message, '', '', '', self._create_time))
 
     def get_first_name(self):
         return self._first_name
@@ -86,8 +88,34 @@ class Contact:
         for change in self._history:
             change.print()
 
+    def to_dict(self):
+        return {
+            "first_name": self._first_name,
+            "last_name": self._last_name,
+            "phone_number": self._phone_number,
+            "email_address": self._email_address,
+            "address": self._address,
+            "create_time": self._create_time.isoformat(),
+            "update_time": self._update_time.isoformat(),
+            "history": [change.to_dict() for change in self._history]
+        }
+
+    @classmethod
+    def from_dict(cls, data):
+        return cls(
+            first_name=data["first_name"],
+            last_name=data["last_name"],
+            phone_number=data["phone_number"],
+            email_address=data["email_address"],
+            address=data["address"],
+            create_time=datetime.datetime.fromisoformat(data["create_time"]),
+            update_time=datetime.datetime.fromisoformat(data["update_time"]),
+            history=[Change.from_dict(change) for change in data["history"]]
+        )
+
 class Change:
-    def __init__(self, operation='', message='', field='', old_value='', new_value='', change_time=''):
+    def __init__(self, operation='', message='', field='', old_value='', new_value='', 
+                 change_time=datetime.datetime.now()):
         self._operation = operation
         self._message = message
         self._field = field
@@ -100,3 +128,24 @@ class Change:
             print(f'{self._change_time} [{self._operation}] {self._message}')
         elif self._operation == 'Updated':
             print(f"{self._change_time} [{self._operation}] {self._field} from '{self._old_value}' to '{self._new_value}'")
+
+    def to_dict(self):
+        return {
+            "operation": self._operation,
+            "message": self._message,
+            "field": self._field,
+            "old_value": self._old_value,
+            "new_value": self._new_value,
+            "change_time": self._change_time.isoformat()
+        }
+    
+    @classmethod
+    def from_dict(cls, data):
+        return cls(
+            operation=data["operation"],
+            message=data["message"],
+            field=data["field"],
+            old_value=data["old_value"],
+            new_value=data["new_value"],
+            change_time=datetime.datetime.fromisoformat(data["change_time"])
+        )

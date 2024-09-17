@@ -1,6 +1,7 @@
 from contact import Contact
 from tabulate import tabulate
 import csv
+import json
 import re
 from collections import defaultdict
 from datetime import datetime
@@ -115,13 +116,15 @@ class PhoneBook:
                             email_address = row[3] if len(row) > 3 else ""
                             address = row[4] if len(row) > 4 else ""
 
+                            is_valid = True
+                            error_message = f"[Failed] Contact {attempted_additions} not added: "
+
                             # Check for duplicated contacts
                             if self.is_contact_exist(first_name, last_name):
                                 is_valid = False
                                 error_message += f"Contact '{first_name} {last_name}' already exists. "
+                            
                             # Check for mandatory fields, validate phone number and email
-                            is_valid = True
-                            error_message = f"[Failed] Contact {attempted_additions} not added: "
                             if not first_name:
                                 is_valid = False
                                 error_message += "First name missing. "
@@ -513,17 +516,36 @@ class PhoneBook:
         
         print()
 
+    def export_contacts_to_json(self, file_path):
+        contacts_data = [contact.to_dict() for contact in self.contacts]
+        with open(file_path, 'w') as json_file:
+            json.dump(contacts_data, json_file, indent=4)
+        print(f"Contacts successfully exported to {file_path}")
+
+    def import_contacts_from_json(self, file_path):
+        try:
+            with open(file_path, 'r') as json_file:
+                contacts_data = json.load(json_file)
+                self.contacts = [Contact.from_dict(contact) for contact in contacts_data]
+            print(f"Contacts successfully imported from {file_path}")
+        except FileNotFoundError:
+            print(f"File {file_path} not found.")
+        except json.JSONDecodeError:
+            print(f"Error decoding JSON from file {file_path}.")
+
 phone_book = PhoneBook()
+phone_book.import_contacts_from_json('database.json')
 phone_book.create_contact()
 phone_book.print_all_contacts()
 phone_book.update_contact()
 phone_book.search_contact()
-phone_book.update_contact()
-phone_book.delete_contact()
+#phone_book.update_contact()
+#phone_book.delete_contact()
 #phone_book.print_all_contacts()
-#phone_book.sort_contacts()
+phone_book.sort_contacts()
 #phone_book.group_contacts()
 #phone_book.search_contacts_by_date()
+phone_book.export_contacts_to_json('database.json')
 
 '''
 Todo:
