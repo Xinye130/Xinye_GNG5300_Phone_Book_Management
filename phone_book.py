@@ -327,14 +327,14 @@ class PhoneBook:
 
                 if field_index == '1':
                     old_value = contact_to_update.get_first_name()
-                    if not old_value == new_value:
+                    if not old_value.lower() == new_value.lower():
                         if self.is_contact_exist(new_value, contact_to_update.get_last_name()):
                             print(f"Failed to update contact. Contact '{new_value} {contact_to_update.get_last_name()}' already exists.\n")
                             continue
                     contact_to_update.set_first_name(new_value)
                 elif field_index == '2':
                     old_value = contact_to_update.get_last_name()
-                    if not old_value == new_value:
+                    if not old_value.lower() == new_value.lower():
                         if self.is_contact_exist(contact_to_update.get_first_name(), new_value):
                             print(f"Failed to update contact. Contact '{contact_to_update.get_first_name()} {new_value}' already exists.\n")
                             continue
