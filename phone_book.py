@@ -354,8 +354,12 @@ class PhoneBook:
             print("How would you like to delete contacts:")
             print("1. Delete manually")
             print("2. Batch delete from CSV")
+            print("3. Delete all contacts")
             print("Or enter q to quit.")
-            choice = input("Enter your choice (1/2/q): ").strip()
+            choice = input("Enter your choice (1/2/3/q): ").strip()
+
+            while choice not in ['1', '2', '3', 'q']:
+                choice = input("Invalid choice. Please enter a valid option: ").strip()
 
             if choice == 'q':
                 print("Quiting.\n")
@@ -420,8 +424,19 @@ class PhoneBook:
                 except FileNotFoundError:
                     print("CSV file not found. Please try again.\n")
 
-            else:
-                print("Invalid choice. Please try again.\n")
+            elif choice == '3':
+                self.delete_all_contacts()
+
+    def delete_all_contacts(self):
+        choice = input("Are you sure you want to delete all contacts? (yes/no): ").strip().lower()
+
+        while choice not in ['yes', 'no']:
+            choice = input("Invalid choice. Please enter yes or no: ").strip().lower()
+        
+        if choice == 'yes':
+            self.contacts.clear()
+            print("All contacts deleted.")
+        print()
 
     def sort_contacts(self):
         while True:
@@ -535,12 +550,12 @@ class PhoneBook:
 
 phone_book = PhoneBook()
 phone_book.import_contacts_from_json('database.json')
-phone_book.create_contact()
+#phone_book.create_contact()
 phone_book.print_all_contacts()
-phone_book.update_contact()
-phone_book.search_contact()
 #phone_book.update_contact()
-#phone_book.delete_contact()
+#phone_book.search_contact()
+#phone_book.update_contact()
+phone_book.delete_contact()
 #phone_book.print_all_contacts()
 phone_book.sort_contacts()
 #phone_book.group_contacts()
