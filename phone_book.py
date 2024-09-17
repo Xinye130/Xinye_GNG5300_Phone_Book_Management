@@ -60,6 +60,14 @@ class PhoneBook:
         phone_number_regex = re.compile(r'\(\d{3}\) \d{3}-\d{4}')
         return re.fullmatch(phone_number_regex, phone_number) is not None
     
+    def is_contact_exist(self, first_name, last_name):
+        full_name_to_check = f"{first_name.lower()} {last_name.lower()}"
+        for contact in self.contacts:
+            full_name = f"{contact.get_first_name().lower()} {contact.get_last_name().lower()}"
+            if full_name == full_name_to_check:
+                return True
+        return False
+
     def input_mandatory_field(self, value):
         while value == "":
             value = input("Mandatory field. Please enter a valid value: ").strip()
@@ -84,9 +92,13 @@ class PhoneBook:
                     email_address = input("Invalid email address. Please try again: ").strip()
                 address = input("Enter address (or press Enter to skip): ").strip()
 
-                new_contact = Contact(first_name, last_name, phone_number, email_address, address)
-                self.contacts.append(new_contact)
-                print(f"Contact added: {first_name} {last_name}, {phone_number}, {email_address}, {address}\n")
+                if not self.is_contact_exist(first_name, last_name):
+                    new_contact = Contact(first_name, last_name, phone_number, email_address, address)
+                    self.contacts.append(new_contact)
+                    print(f"Contact added: {first_name} {last_name}, {phone_number}, {email_address}, {address}\n")
+                else:
+                    print(f"Failed to add contact. Contact '{first_name} {last_name}' already exists.\n")
+                    continue
 
             elif choice == '2':
                 csv_file = input("Enter the path to the CSV file: ")
@@ -103,6 +115,10 @@ class PhoneBook:
                             email_address = row[3] if len(row) > 3 else ""
                             address = row[4] if len(row) > 4 else ""
 
+                            # Check for duplicated contacts
+                            if self.is_contact_exist(first_name, last_name):
+                                is_valid = False
+                                error_message += f"Contact '{first_name} {last_name}' already exists. "
                             # Check for mandatory fields, validate phone number and email
                             is_valid = True
                             error_message = f"[Failed] Contact {attempted_additions} not added: "
@@ -120,8 +136,7 @@ class PhoneBook:
                                 error_message += "Phone number invalid, should be in format (###) ###-####. "
                             if email_address and not self.is_valid_email(email_address):
                                 is_valid = False
-                                error_message += "Email address invalid. "
-                            # Add check duplicated contacts
+                                error_message += "Email address invalid. "                           
                             
                             if is_valid:
                                 successful_additions += 1
@@ -308,8 +323,18 @@ class PhoneBook:
                 print()
 
                 if field_index == '1':
+                    old_value = contact_to_update.get_first_name()
+                    if not old_value == new_value:
+                        if self.is_contact_exist(new_value, contact_to_update.get_last_name()):
+                            print(f"Failed to update contact. Contact '{new_value} {contact_to_update.get_last_name()}' already exists.\n")
+                            continue
                     contact_to_update.set_first_name(new_value)
                 elif field_index == '2':
+                    old_value = contact_to_update.get_last_name()
+                    if not old_value == new_value:
+                        if self.is_contact_exist(contact_to_update.get_first_name(), new_value):
+                            print(f"Failed to update contact. Contact '{contact_to_update.get_first_name()} {new_value}' already exists.\n")
+                            continue
                     contact_to_update.set_last_name(new_value)
                 elif field_index == '3':
                     contact_to_update.set_phone_number(new_value)
@@ -348,31 +373,22 @@ class PhoneBook:
                 else:
                     self.print_contact_list(matches)
 
-                    if len(matches) > 1:
-                        index = -2
-                        while index < -1 or index >= len(matches):
-                            try:
-                                index = int(input("Enter the index of the contact to delete (or -1 to quit): ").strip())
-                                if index < -1 or index >= len(matches):
-                                    print("Invalid index. Please try again.")
-                            except ValueError:
-                                print("Invalid index. Please try again.")
-                        if index == -1:
-                            print()
-                            continue
-                        contact_to_delete = matches[index]
-                    else:
-                        choice = ''
-                        while choice not in ['q', '1']:
-                            choice = input("Do you want to delete this contact? Enter 1 to delete or q to quit: ").strip().lower()
-                        if choice == 'q':
-                            print()
-                            continue
-                        contact_to_delete = matches[0]
+                    index = -2
+                    while index < -1 or index >= len(matches):
+                        try:
+                            index = int(input("Enter the index of the contact to delete (or -1 to quit): ").strip())
+                            if index < -1 or index >= len(matches):
+                                print("Invalid index. Please try again.\n")
+                        except ValueError:
+                            print("Invalid index. Please try again.\n")
+                    if index == -1:
+                        print()
+                        continue
+                    contact_to_delete = matches[index]
                     
                     delete_name = f"{contact_to_delete.get_first_name()} {contact_to_delete.get_last_name()}"
                     self.contacts.remove(contact_to_delete)
-                    print(f"Contact deleted: {delete_name}\n")
+                    print(f"Contact '{delete_name}' deleted\n")
 
             elif choice == '2':
                 csv_file = input("Enter the path to the CSV file: ").strip()
@@ -389,14 +405,14 @@ class PhoneBook:
                                     found = False
                                     for contact in self.contacts:
                                         contact_full_name = f"{contact.get_first_name()} {contact.get_last_name()}"
-                                        if contact_full_name == full_name:
+                                        if contact_full_name.lower() == full_name.lower():
                                             self.contacts.remove(contact)
-                                            print(f"[Succeeded] Contact deleted: {contact_full_name}")
+                                            print(f"[Succeeded] Contact '{contact_full_name}' deleted")
                                             successful_deletions += 1
                                             found = True
                                             break
                                     if not found:
-                                        print(f"[Failed] Contact '{full_name}' not found.")
+                                        print(f"[Failed] Contact '{full_name}' not found")
                         print(f"Batch delete completed: {successful_deletions}/{attempted_deletions} contacts deleted successfully.\n")
                 except FileNotFoundError:
                     print("CSV file not found. Please try again.\n")
@@ -502,8 +518,8 @@ phone_book.create_contact()
 phone_book.print_all_contacts()
 phone_book.update_contact()
 phone_book.search_contact()
-#phone_book.update_contact()
-#phone_book.delete_contact()
+phone_book.update_contact()
+phone_book.delete_contact()
 #phone_book.print_all_contacts()
 #phone_book.sort_contacts()
 #phone_book.group_contacts()
@@ -511,7 +527,6 @@ phone_book.search_contact()
 
 '''
 Todo:
-- Check for duplicated contacts
 - Recording all operations performed in the application along with timestamps
 - (Exporting to csv)
 
@@ -520,4 +535,5 @@ Todo:
 To improve:
 - Grouping
 - Delete all
+- Confirm update
 '''
