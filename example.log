@@ -10,3 +10,124 @@
 09/16/2024 11:54:04 PM Grouping contacts
 09/16/2024 11:54:06 PM Exporting contacts to JSON
 09/16/2024 11:54:06 PM Exiting Phone Book Management System
+09/18/2024 06:37:00 PM Start Phone Book Management System
+09/18/2024 06:37:00 PM Import contacts from database.json
+09/18/2024 06:37:00 PM Contact added: John Smith, (980) 755-8640, john.smith@example.com, same
+09/18/2024 06:37:00 PM Contact added: Alice Johnson, (105) 327-2370, alice.johnson@example.com, 5
+09/18/2024 06:37:00 PM Contact added: Jane Doe, (580) 724-9177, jane.doe@example.com, 4
+09/18/2024 06:37:00 PM Contact added: Bob Smith, (511) 467-3235, bob.smith@example.com, 101 Maple St
+09/18/2024 06:37:00 PM Contact added: Charlie Brown, (422) 413-3322, charlie.brown@example.com, 202 Birch St
+09/18/2024 06:37:00 PM Contacts imported from database.json
+09/18/2024 06:37:20 PM Print all contacts
+09/18/2024 06:37:59 PM Start create contact
+09/18/2024 06:38:35 PM Start batch add contacts from a
+09/18/2024 06:38:35 PM Batch addition failed: CSV file not found
+09/18/2024 06:42:07 PM Start batch add contacts from add1.csv
+09/18/2024 06:42:07 PM Contact addition failed: [Failed] Contact 1 not added: Contact 'John Smith' already exists. 
+09/18/2024 06:42:07 PM Contact addition failed: [Failed] Contact 2 not added: Last name missing. 
+09/18/2024 06:42:07 PM Contact addition failed: [Failed] Contact 3 not added: First name missing. Last name missing. 
+09/18/2024 06:42:07 PM Contact addition failed: [Failed] Contact 4 not added: Contact 'John Smith' already exists. Phone number missing. 
+09/18/2024 06:42:07 PM Contact addition failed: [Failed] Contact 5 not added: Contact 'John Smith' already exists. 
+09/18/2024 06:42:07 PM Contact addition failed: [Failed] Contact 6 not added: Contact 'John Smith' already exists. 
+09/18/2024 06:42:07 PM Contact addition failed: [Failed] Contact 7 not added: First name missing. Last name missing. Phone number missing. 
+09/18/2024 06:42:07 PM Contact addition failed: [Failed] Contact 8 not added: First name missing. Last name missing. Phone number missing. 
+09/18/2024 06:42:07 PM Contact addition failed: [Failed] Contact 9 not added: First name missing. Last name missing. Phone number missing. 
+09/18/2024 06:42:07 PM Contact addition failed: [Failed] Contact 10 not added: Contact 'John Smith' already exists. Phone number invalid, should be in format (###) ###-####. 
+09/18/2024 06:42:07 PM Contact addition failed: [Failed] Contact 11 not added: Contact 'John Smith' already exists. Email address invalid. 
+09/18/2024 06:42:07 PM Contact addition failed: [Failed] Contact 12 not added: Contact 'John Smith' already exists. Phone number invalid, should be in format (###) ###-####. Email address invalid. 
+09/18/2024 06:42:07 PM Contact addition failed: [Failed] Contact 13 not added: Last name missing. Phone number invalid, should be in format (###) ###-####. Email address invalid. 
+09/18/2024 06:42:07 PM Contact addition failed: [Failed] Contact 14 not added: Contact 'Jane Doe' already exists. 
+09/18/2024 06:42:07 PM Contact addition failed: [Failed] Contact 15 not added: Contact 'Alice Johnson' already exists. 
+09/18/2024 06:42:07 PM Contact addition failed: [Failed] Contact 16 not added: Contact 'Bob Smith' already exists. 
+09/18/2024 06:42:07 PM Contact addition failed: [Failed] Contact 17 not added: Contact 'Charlie Brown' already exists. 
+09/18/2024 06:42:07 PM Batch addition completed: 0/17 contacts added successfully
+09/18/2024 06:44:32 PM Contact added: First Last, (111) 111-1111, test@test.com, test
+09/18/2024 06:44:44 PM Quit Create Contact
+09/18/2024 06:44:52 PM Start search for contacts
+09/18/2024 06:44:58 PM Search by full name: @
+09/18/2024 06:44:58 PM Search by full name: @
+09/18/2024 06:44:58 PM Search by full name: @
+09/18/2024 06:44:58 PM Search by full name: @
+09/18/2024 06:44:58 PM Search by full name: @
+09/18/2024 06:44:58 PM Search by full name: @
+09/18/2024 06:55:42 PM Search by full name: jo
+09/18/2024 06:55:42 PM Search by full name: jo
+09/18/2024 06:55:42 PM Search by full name: jo
+09/18/2024 06:55:42 PM Search by full name: jo
+09/18/2024 06:55:42 PM Search by full name: jo
+09/18/2024 06:55:42 PM Search by full name: jo
+09/18/2024 06:55:49 PM View history of changes
+09/18/2024 07:00:14 PM Search by phone number: 8
+09/18/2024 07:00:14 PM Search by phone number: 8
+09/18/2024 07:00:14 PM Search by phone number: 8
+09/18/2024 07:00:14 PM Search by phone number: 8
+09/18/2024 07:00:14 PM Search by phone number: 8
+09/18/2024 07:00:14 PM Search by phone number: 8
+09/18/2024 07:00:18 PM View history of changes
+09/18/2024 07:01:31 PM Search by creation date: 2024-09-14 to 2024-09-17
+09/18/2024 07:02:13 PM Quit search for contacts
+09/18/2024 07:02:19 PM Start update contact
+09/18/2024 07:02:59 PM Start update contact: First Last, (111) 111-1111, test@test.com, test
+09/18/2024 07:03:20 PM Phone Number changed from '(222) 222-2222' to '(222) 222-2222'
+09/18/2024 07:03:20 PM Finish update contact. Contact is now: First Last, (222) 222-2222, test@test.com, test
+09/18/2024 07:04:26 PM Address changed from 'test3' to 'test3'
+09/18/2024 07:04:26 PM Finish update contact. Contact is now: First Last, (222) 222-2222, test@test.com, test3
+09/18/2024 07:04:34 PM Email Address changed from '' to ''
+09/18/2024 07:04:34 PM Finish update contact. Contact is now: First Last, (222) 222-2222, , test3
+09/18/2024 07:04:38 PM Finish update contact: First Last
+09/18/2024 07:07:31 PM Quit update contact
+09/18/2024 07:07:43 PM Start delete contact
+09/18/2024 07:07:49 PM Try to delete all contacts
+09/18/2024 07:07:49 PM Quit delete all contacts
+09/18/2024 07:08:14 PM Try to delete contact: First
+09/18/2024 07:08:18 PM Contact deleted: First Last
+09/18/2024 07:09:14 PM Quit delete contact
+09/18/2024 07:09:17 PM Start sort contacts
+09/18/2024 07:09:21 PM Sorted contacts by first name ascending
+09/18/2024 07:09:34 PM Sorted contacts by update time descending
+09/18/2024 07:09:57 PM Quit sort contacts
+09/18/2024 07:10:00 PM Start group contacts
+09/18/2024 07:10:02 PM Grouped contacts by first letter of last name
+09/18/2024 07:10:02 PM Quit group contacts
+09/18/2024 07:10:13 PM Start group contacts
+09/18/2024 07:10:15 PM Quit group contacts
+09/18/2024 07:10:26 PM Export contacts to database.json
+09/18/2024 07:10:26 PM Contacts exported to database.json
+09/18/2024 07:10:26 PM Exit Phone Book Management System
+09/18/2024 07:12:01 PM Start Phone Book Management System
+09/18/2024 07:12:01 PM Import contacts from database.json
+09/18/2024 07:12:01 PM Contact added: John Smith, (980) 755-8640, john.smith@example.com, same
+09/18/2024 07:12:01 PM Contact added: Alice Johnson, (105) 327-2370, alice.johnson@example.com, 5
+09/18/2024 07:12:01 PM Contact added: Jane Doe, (580) 724-9177, jane.doe@example.com, 4
+09/18/2024 07:12:01 PM Contact added: Bob Smith, (511) 467-3235, bob.smith@example.com, 101 Maple St
+09/18/2024 07:12:01 PM Contact added: Charlie Brown, (422) 413-3322, charlie.brown@example.com, 202 Birch St
+09/18/2024 07:12:01 PM Contacts imported from database.json
+09/18/2024 07:12:20 PM Start update contact
+09/18/2024 07:12:26 PM Start update contact: Jane Doe, (580) 724-9177, jane.doe@example.com, 4
+09/18/2024 07:12:32 PM Address changed from 'test' to 'test'
+09/18/2024 07:12:45 PM Email Address changed from 'test2@test.com' to 'test2@test.com'
+09/18/2024 07:12:53 PM Finish update contact. Contact is now: Jane Doe, (580) 724-9177, test2@test.com, test
+09/18/2024 07:13:03 PM Quit update contact
+09/18/2024 07:13:36 PM Start search for contacts
+09/18/2024 07:13:40 PM Search by full name: jane
+09/18/2024 07:13:50 PM View history of changes
+09/18/2024 07:14:11 PM Search by phone number: @
+09/18/2024 07:14:33 PM Search by phone number: #
+09/18/2024 07:14:46 PM Search by phone number: 3
+09/18/2024 07:14:59 PM Search by phone number: q
+09/18/2024 07:15:22 PM Quit search for contacts
+09/18/2024 07:15:24 PM Start delete contact
+09/18/2024 07:15:32 PM Start batch delete contacts from d
+09/18/2024 07:15:32 PM Batch delete failed: CSV file not found
+09/18/2024 07:15:44 PM Start batch delete contacts from delete.csv
+09/18/2024 07:15:44 PM Contact deleted: John Smith
+09/18/2024 07:15:44 PM Contact not found: Jane (Doe)
+09/18/2024 07:15:44 PM Contact not found: Alice (Johnson)
+09/18/2024 07:15:44 PM Contact deleted: Bob Smith
+09/18/2024 07:15:44 PM Contact deleted: Charlie Brown
+09/18/2024 07:15:44 PM Batch delete completed: 3/5 contacts deleted successfully
+09/18/2024 07:16:02 PM Quit delete contact
+09/18/2024 07:16:04 PM Print all contacts
+09/18/2024 07:16:07 PM Export contacts to database.json
+09/18/2024 07:16:07 PM Contacts exported to database.json
+09/18/2024 07:16:07 PM Exit Phone Book Management System

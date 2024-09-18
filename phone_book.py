@@ -191,16 +191,19 @@ class PhoneBook:
             show_create_time = False
             if search_type in ['1', '2']:
                 search_query = self.input_mandatory_field(input("Enter the search query: ").strip()) 
+                
+                if search_type == '1':
+                    self.logger.info(f"Search by full name: {search_query}")
+                elif search_type == '2':
+                    self.logger.info(f"Search by phone number: {search_query}")
 
                 for contact in self.contacts:
                     if search_type == '1':
-                        self.logger.info(f"Search by full name: {search_query}")
                         query_name = ''.join(search_query.lower().split())
                         full_name = ''.join(f"{contact.get_first_name()} {contact.get_last_name()}".lower().split())
                         if query_name in full_name:
                             matches.append(contact)
                     elif search_type == '2':
-                        self.logger.info(f"Search by phone number: {search_query}")
                         query_number = re.sub(r'\D', '', search_query)
                         phone_number = re.sub(r'\D', '', contact.get_phone_number())
                         if query_number in phone_number:
@@ -314,8 +317,7 @@ class PhoneBook:
 
             print("\nThe contact to update is:")
             self.print_contact(contact_to_update)
-            self.logger.info(f"Start update contact: {contact_to_update.get_first_name()} {contact_to_update.get_last_name()},
-                             {contact_to_update.get_phone_number()}, {contact_to_update.get_email_address()}, {contact_to_update.get_address()}")
+            self.logger.info(f"Start update contact: {contact_to_update.get_first_name()} {contact_to_update.get_last_name()}, {contact_to_update.get_phone_number()}, {contact_to_update.get_email_address()}, {contact_to_update.get_address()}")
 
             field_index = 'invalid'
             while not field_index == 'q':
@@ -332,7 +334,7 @@ class PhoneBook:
 
                 if field_index == 'q':
                     print("Quiting.\n")
-                    self.logger.info(f"Finish update contact: {contact_to_update.get_first_name()} {contact_to_update.get_last_name()}")
+                    self.logger.info(f"Finish update contact. Contact is now: {contact_to_update.get_first_name()} {contact_to_update.get_last_name()}, {contact_to_update.get_phone_number()}, {contact_to_update.get_email_address()}, {contact_to_update.get_address()}")
                     break
 
                 new_value = input("Enter the new value: ").strip()
@@ -371,8 +373,6 @@ class PhoneBook:
 
                 print("The contact is now: ")
                 self.print_contact(contact_to_update)
-                self.logger.info(f"Finish update contact. Contact is now: {contact_to_update.get_first_name()} {contact_to_update.get_last_name()},
-                                 {contact_to_update.get_phone_number()}, {contact_to_update.get_email_address()}, {contact_to_update.get_address()}")
     
     def delete_contact(self):
         self.logger.info("Start delete contact")
