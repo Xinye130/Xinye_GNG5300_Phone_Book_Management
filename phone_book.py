@@ -14,7 +14,7 @@ class PhoneBook:
         self.contacts = []
 
     def print_all_contacts(self):
-        self.logger.info("Printed all contacts")
+        self.logger.info("Print all contacts")
         if not self.contacts:
             print("No contacts available.\n")
             return
@@ -79,7 +79,7 @@ class PhoneBook:
         return value
  
     def create_contact(self):
-        self.logger.info("Creating a new contact")
+        self.logger.info("Start create contact")
         while True:
             print("How would you like to add contacts:")
             print("1. Add contact manually")
@@ -108,6 +108,7 @@ class PhoneBook:
 
             elif choice == '2':
                 csv_file = input("Enter the path to the CSV file: ")
+                self.logger.info(f"Start batch add contacts from {csv_file}")
                 try:
                     with open(csv_file, newline='') as file:
                         reader = csv.reader(file)
@@ -153,19 +154,23 @@ class PhoneBook:
                                 print(f"[Succeeded] Contact {attempted_additions} added: {first_name} {last_name}, {phone_number}, {email_address}, {address}")
                             else:
                                 print(error_message)
+                                self.logger.info("Contact addition failed: " + error_message)
                         print(f"Batch addition completed: {successful_additions}/{attempted_additions} contacts added successfully.\n")
+                        self.logger.info(f"Batch addition completed: {successful_additions}/{attempted_additions} contacts added successfully")
                 except FileNotFoundError:
                     print("CSV file not found. Please try again.\n")
+                    self.logger.info("Batch addition failed: CSV file not found")
 
             elif choice == 'q':
                 print("Quiting.\n")
+                self.logger.info("Quit Create Contact")
                 break
 
             else:
                 print("Invalid choice. Please try again.\n")
 
     def search_contact(self):
-        self.logger.info("Searching for contacts")
+        self.logger.info("Start search for contacts")
         while True:
             print("Search contacts by:")
             print("1. Full name")
@@ -179,6 +184,7 @@ class PhoneBook:
             
             if search_type == 'q':
                 print("Quiting.\n")
+                self.logger.info("Quit search for contacts")
                 break
 
             matches = []
@@ -188,11 +194,13 @@ class PhoneBook:
 
                 for contact in self.contacts:
                     if search_type == '1':
+                        self.logger.info(f"Search by full name: {search_query}")
                         query_name = ''.join(search_query.lower().split())
                         full_name = ''.join(f"{contact.get_first_name()} {contact.get_last_name()}".lower().split())
                         if query_name in full_name:
                             matches.append(contact)
                     elif search_type == '2':
+                        self.logger.info(f"Search by phone number: {search_query}")
                         query_number = re.sub(r'\D', '', search_query)
                         phone_number = re.sub(r'\D', '', contact.get_phone_number())
                         if query_number in phone_number:
@@ -225,6 +233,7 @@ class PhoneBook:
             print("\nHistory of changes:")
             contact_to_view.print_history()
             print()
+            self.logger.info("View history of changes")
 
     def search_contacts_by_date(self):
         print("\nSearch contacts by date (inclusively):")
@@ -258,6 +267,7 @@ class PhoneBook:
             else:
                 dates = input("Invalid date format. Please try again: ").strip().split()
 
+        self.logger.info(f"Search by creation date: {start_date} to {end_date}")
         for contact in self.contacts:
             create_time = contact.get_create_time().date()
             if start_date <= create_time <= end_date:
@@ -266,13 +276,14 @@ class PhoneBook:
         return matches
 
     def update_contact(self):
-        self.logger.info("Updating contacts")
+        self.logger.info("Start update contact")
         while True:
             print("Update contact")
             search_query = self.input_mandatory_field(input("Enter the name of the contact to be updated (or q to quit): ").strip())
 
             if search_query == 'q':
                 print('Quiting.\n')
+                self.logger.info("Quit update contact")
                 break
 
             matches = []
@@ -303,6 +314,8 @@ class PhoneBook:
 
             print("\nThe contact to update is:")
             self.print_contact(contact_to_update)
+            self.logger.info(f"Start update contact: {contact_to_update.get_first_name()} {contact_to_update.get_last_name()},
+                             {contact_to_update.get_phone_number()}, {contact_to_update.get_email_address()}, {contact_to_update.get_address()}")
 
             field_index = 'invalid'
             while not field_index == 'q':
@@ -319,6 +332,7 @@ class PhoneBook:
 
                 if field_index == 'q':
                     print("Quiting.\n")
+                    self.logger.info(f"Finish update contact: {contact_to_update.get_first_name()} {contact_to_update.get_last_name()}")
                     break
 
                 new_value = input("Enter the new value: ").strip()
@@ -337,6 +351,7 @@ class PhoneBook:
                     if not old_value.lower() == new_value.lower():
                         if self.is_contact_exist(new_value, contact_to_update.get_last_name()):
                             print(f"Failed to update contact. Contact '{new_value} {contact_to_update.get_last_name()}' already exists.\n")
+                            self.logger.info(f"Failed to update contact: Contact '{new_value} {contact_to_update.get_last_name()}' already exists")
                             continue
                     contact_to_update.set_first_name(new_value)
                 elif field_index == '2':
@@ -344,6 +359,7 @@ class PhoneBook:
                     if not old_value.lower() == new_value.lower():
                         if self.is_contact_exist(contact_to_update.get_first_name(), new_value):
                             print(f"Failed to update contact. Contact '{contact_to_update.get_first_name()} {new_value}' already exists.\n")
+                            self.logger.info(f"Failed to update contact: Contact '{contact_to_update.get_first_name()} {new_value}' already exists")
                             continue
                     contact_to_update.set_last_name(new_value)
                 elif field_index == '3':
@@ -355,9 +371,11 @@ class PhoneBook:
 
                 print("The contact is now: ")
                 self.print_contact(contact_to_update)
+                self.logger.info(f"Finish update contact. Contact is now: {contact_to_update.get_first_name()} {contact_to_update.get_last_name()},
+                                 {contact_to_update.get_phone_number()}, {contact_to_update.get_email_address()}, {contact_to_update.get_address()}")
     
     def delete_contact(self):
-        self.logger.info("Deleting contacts")
+        self.logger.info("Start delete contact")
         while True:
             print("How would you like to delete contacts:")
             print("1. Delete manually")
@@ -371,10 +389,12 @@ class PhoneBook:
 
             if choice == 'q':
                 print("Quiting.\n")
+                self.logger.info("Quit delete contact")
                 break
 
             elif choice == '1':
                 delete_query = self.input_mandatory_field(input("Enter the name of the contact to delete: ").strip())
+                self.logger.info(f"Try to delete contact: {delete_query}")
 
                 matches = []
                 for contact in self.contacts:
@@ -385,6 +405,7 @@ class PhoneBook:
 
                 if not matches:
                     print(f"Contact '{delete_query}' not found.\n")
+                    self.logger.info(f"Contact '{delete_query}' not found")
                 else:
                     self.print_contact_list(matches)
 
@@ -398,15 +419,18 @@ class PhoneBook:
                             print("Invalid index. Please try again.\n")
                     if index == -1:
                         print("Quiting.\n")
+                        self.logger.info(f"Quit delete contact: {delete_query}")
                         continue
                     contact_to_delete = matches[index]
                     
                     delete_name = f"{contact_to_delete.get_first_name()} {contact_to_delete.get_last_name()}"
                     self.contacts.remove(contact_to_delete)
                     print(f"Contact '{delete_name}' deleted\n")
+                    self.logger.info(f"Contact deleted: {delete_name}")
 
             elif choice == '2':
                 csv_file = input("Enter the path to the CSV file: ").strip()
+                self.logger.info(f"Start batch delete contacts from {csv_file}")
                 try:
                     with open(csv_file, newline='') as file:
                         reader = csv.reader(file)
@@ -423,20 +447,25 @@ class PhoneBook:
                                         if contact_full_name.lower() == full_name.lower():
                                             self.contacts.remove(contact)
                                             print(f"[Succeeded] Contact '{contact_full_name}' deleted")
+                                            self.logger.info(f"Contact deleted: {contact_full_name}")
                                             successful_deletions += 1
                                             found = True
                                             break
                                     if not found:
                                         print(f"[Failed] Contact '{full_name}' not found")
+                                        self.logger.info(f"Contact not found: {full_name}")
                         print(f"Batch delete completed: {successful_deletions}/{attempted_deletions} contacts deleted successfully.\n")
+                        self.logger.info(f"Batch delete completed: {successful_deletions}/{attempted_deletions} contacts deleted successfully")
                 except FileNotFoundError:
                     print("CSV file not found. Please try again.\n")
+                    self.logger.info("Batch delete failed: CSV file not found")
 
             elif choice == '3':
                 self.delete_all_contacts()
 
     def delete_all_contacts(self):
         choice = input("Are you sure you want to delete all contacts? (yes/no): ").strip().lower()
+        self.logger.info("Try to delete all contacts")
 
         while choice not in ['yes', 'no']:
             choice = input("Invalid choice. Please enter yes or no: ").strip().lower()
@@ -444,10 +473,13 @@ class PhoneBook:
         if choice == 'yes':
             self.contacts.clear()
             print("All contacts deleted.")
-        print()
+            self.logger.info("All contacts deleted")
+        else:
+            print()
+            self.logger.info("Quit delete all contacts")
 
     def sort_contacts(self):
-        self.logger.info("Sorting contacts")
+        self.logger.info("Start sort contacts")
         while True:
             print("Do you want to sort contacts by:")
             print("1. First Name")
@@ -463,6 +495,7 @@ class PhoneBook:
 
             if sort_choice == 'q':
                 print("Quiting.\n")
+                self.logger.info("Quit sort contacts")
                 return
 
             print("\nSelect a sort order:")
@@ -481,19 +514,25 @@ class PhoneBook:
                 order_choice = input("Invalid choice. Please enter a valid option: ").strip()
 
             reverse = (order_choice == '2')
+            order = "descending" if reverse else "ascending"
             show_create_time = (sort_choice == '4')
             show_update_time = (sort_choice == '5')
 
             if sort_choice == '1':
                 self.contacts.sort(key=lambda contact: contact.get_first_name().lower(), reverse=reverse)
+                self.logger.info(f"Sorted contacts by first name {order}")
             elif sort_choice == '2':
                 self.contacts.sort(key=lambda contact: contact.get_last_name().lower(), reverse=reverse)
+                self.logger.info(f"Sorted contacts by last name {order}")
             elif sort_choice == '3':
                 self.contacts.sort(key=lambda contact: int(re.sub(r'\D', '', contact.get_phone_number())), reverse=reverse)
+                self.logger.info(f"Sorted contacts by phone number {order}")
             elif sort_choice == '4':
                 self.contacts.sort(key=lambda contact: contact.get_create_time(), reverse=reverse)
+                self.logger.info(f"Sorted contacts by create time {order}")
             elif sort_choice == '5':
                 self.contacts.sort(key=lambda contact: contact.get_update_time(), reverse=reverse)
+                self.logger.info(f"Sorted contacts by update time {order}")
 
             print("\nContacts sorted successfully. Here are the first few contacts: ")
             self.print_contact_list(self.contacts[:5], False, show_create_time, show_update_time)
@@ -508,7 +547,7 @@ class PhoneBook:
             print()
 
     def group_contacts(self):
-        self.logger.info("Grouping contacts")
+        self.logger.info("Start group contacts")
         print("Group contacts by:")
         print("1. First letter of last name")
         print("Or enter 'q' to quit.")
@@ -519,6 +558,7 @@ class PhoneBook:
 
         if choice == 'q':
             print("Quiting.\n")
+            self.logger.info("Quit group contacts")
             return
 
         # Group contacts by the first letter of last name
@@ -526,6 +566,7 @@ class PhoneBook:
         for contact in self.contacts:
             first_letter = contact.get_last_name()[0].upper()
             grouped_contacts[first_letter].append(contact)
+        self.logger.info("Grouped contacts by first letter of last name")
 
         # Sort the dictionary by keys alphabetically (first letters)
         sorted_grouped_contacts = dict(sorted(grouped_contacts.items()))
@@ -540,30 +581,34 @@ class PhoneBook:
             print(tabulate(rows, headers=headers, tablefmt="grid"))
         
         print()
+        self.logger.info("Quit group contacts")
 
     def export_contacts_to_json(self, file_path):
-        self.logger.info("Exporting contacts to JSON")
+        self.logger.info(f"Export contacts to {file_path}")
         contacts_data = [contact.to_dict() for contact in self.contacts]
         with open(file_path, 'w') as json_file:
             json.dump(contacts_data, json_file, indent=4)
         print(f"Contacts successfully exported to {file_path}")
+        self.logger.info(f"Contacts exported to {file_path}")
 
     def import_contacts_from_json(self, file_path):
-        self.logger.info("Importing contacts from JSON")
+        self.logger.info(f"Import contacts from {file_path}")
         try:
             with open(file_path, 'r') as json_file:
                 contacts_data = json.load(json_file)
                 self.contacts = [Contact.from_dict(contact) for contact in contacts_data]
             print(f"Contacts successfully imported from {file_path}")
+            self.logger.info(f"Contacts imported from {file_path}")
         except FileNotFoundError:
             print(f"File {file_path} not found.")
+            self.logger.info(f"File {file_path} not found.")
         except json.JSONDecodeError:
             print(f"Error decoding JSON from file {file_path}.")
+            self.logger.info(f"Error decoding JSON from file {file_path}.")
 
 
 '''
 Todo:
-- Recording all operations performed in the application along with timestamps
 - (Exporting to csv)
 
 To improve:

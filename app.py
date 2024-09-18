@@ -13,7 +13,7 @@ def init_logging():
 def main():
     init_logging()
     logger = logging.getLogger("phoneBookLogger")
-    logger.info("Starting Phone Book Management System")
+    logger.info("Start Phone Book Management System")
 
     phone_book = PhoneBook()
 
@@ -43,7 +43,7 @@ def main():
             print("Exiting the Phone Book Management System ...")
             print("Exporting contacts ...")
             phone_book.export_contacts_to_json("database.json")
-            logger.info("Exiting Phone Book Management System")
+            logger.info("Exit Phone Book Management System")
             break
         elif choice == '1':
             phone_book.print_all_contacts()

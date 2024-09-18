@@ -1,6 +1,9 @@
 import datetime
+import logging
 
 class Contact:
+    logger = logging.getLogger("phoneBookLogger")
+
     def __init__(self, first_name='', last_name='', phone_number='', email_address='', address='', 
                  create_time=datetime.datetime.now(), update_time=datetime.datetime.now(), history=[]):
         self._first_name = first_name
@@ -14,6 +17,7 @@ class Contact:
         if not self._history:
             message = f'{first_name} {last_name}, {phone_number}, {email_address}, {address}'
             self._history.append(Change('Created', message, '', '', '', self._create_time))
+        self.logger.info(f"Contact added: {first_name} {last_name}, {phone_number}, {email_address}, {address}")
 
     def get_first_name(self):
         return self._first_name
@@ -24,8 +28,10 @@ class Contact:
             self._history.append(Change('Updated', '', 'First Name', self._first_name, first_name, self._update_time))
             print(f"First Name changed from '{self._first_name}' to '{first_name}'")
             self._first_name = first_name
+            self.logger.info(f"First Name changed from '{self._first_name}' to '{first_name}'")
         else:
             print("No changes made to First Name.")
+            self.logger.info("No changes made to First Name")
 
     def get_last_name(self):
         return self._last_name
@@ -36,8 +42,10 @@ class Contact:
             self._history.append(Change('Updated', '', 'Last Name', self._last_name, last_name, self._update_time))
             print(f"Last Name changed from '{self._last_name}' to '{last_name}'")
             self._last_name = last_name
+            self.logger.info(f"Last Name changed from '{self._last_name}' to '{last_name}'")
         else:
             print("No changes made to Last Name.")
+            self.logger.info("No changes made to Last Name")
 
     def get_phone_number(self):
         return self._phone_number
@@ -48,8 +56,10 @@ class Contact:
             self._history.append(Change('Updated', '', 'Phone Number', self._phone_number, phone_number, self._update_time))
             print(f"Phone Number changed from '{self._phone_number}' to '{phone_number}'")
             self._phone_number = phone_number
+            self.logger.info(f"Phone Number changed from '{self._phone_number}' to '{phone_number}'")
         else:
             print("No changes made to Phone Number.")
+            self.logger.info("No changes made to Phone Number")
 
     def get_email_address(self):
         return self._email_address
@@ -60,8 +70,10 @@ class Contact:
             self._history.append(Change('Updated', '', 'Email Address', self._email_address, email_address, self._update_time))
             print(f"Email Address changed from '{self._email_address}' to '{email_address}'")
             self._email_address = email_address
+            self.logger.info(f"Email Address changed from '{self._email_address}' to '{email_address}'")
         else:
             print("No changes made to Email Address.")
+            self.logger.info("No changes made to Email Address")
 
     def get_address(self):
         return self._address
@@ -71,9 +83,11 @@ class Contact:
             self._update_time = datetime.datetime.now()
             self._history.append(Change('Updated', '', 'Address', self._address, address, self._update_time))
             print(f"Address changed from '{self._address}' to '{address}'")
-            self._address = address        
+            self._address = address
+            self.logger.info(f"Address changed from '{self._address}' to '{address}'")
         else:
             print("No changes made to Address.")
+            self.logger.info("No changes made to Address")
 
     def get_create_time(self):
         return self._create_time
