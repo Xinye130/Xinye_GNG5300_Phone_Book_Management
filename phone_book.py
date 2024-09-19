@@ -8,12 +8,21 @@ from datetime import datetime
 import logging
 
 class PhoneBook:
+    '''
+    Class to represent a phone book that stores contacts
+    '''
     logger = logging.getLogger("phoneBookLogger")
 
     def __init__(self):
+        ''' 
+        Initialize the PhoneBook object with an empty list to store contacts
+        '''
         self.contacts = []
 
     def print_all_contacts(self):
+        '''
+        Print all contacts in the phone book in a tabular format
+        '''
         print("[Print All Contacts]")
         self.logger.info("Print all contacts")
         
@@ -35,6 +44,10 @@ class PhoneBook:
         print()
 
     def print_contact_list(self, contacts, show_index=True, show_create_time=False, show_update_time=False):
+        '''
+        Print a list of contacts in a tabular format
+        Optionally show the index of each contact, the create time, or the update time
+        '''
         headers = ["First Name", "Last Name", "Phone Number", "Email Address", "Address"]
         if show_create_time:
             headers.append("Create Time")
@@ -55,6 +68,9 @@ class PhoneBook:
         print(tabulate(rows, headers=headers, tablefmt="grid", showindex = show_index))
     
     def is_valid_email(self, email):
+        '''
+        Check if the email address is valid using regular expressions
+        '''
         if email == "":
             return True
         
@@ -63,11 +79,18 @@ class PhoneBook:
         return re.fullmatch(email_regex, email) is not None
     
     def is_valid_phone_number(self, phone_number):
+        '''
+        Check if the phone number is valid using regular expressions
+        Phone number should be in the format (###) ###-####
+        '''
         # Regular expression for validating a phone number: (###) ###-####
         phone_number_regex = re.compile(r'\(\d{3}\) \d{3}-\d{4}')
         return re.fullmatch(phone_number_regex, phone_number) is not None
     
     def is_contact_exist(self, first_name, last_name):
+        '''
+        Check if a contact with the given first name and last name already exists in the phone book
+        '''
         full_name_to_check = f"{first_name.lower()} {last_name.lower()}"
         for contact in self.contacts:
             full_name = f"{contact.get_first_name().lower()} {contact.get_last_name().lower()}"
@@ -76,11 +99,18 @@ class PhoneBook:
         return False
 
     def input_mandatory_field(self, value):
+        '''
+        Prompt the user to enter a mandatory field until a valid value is provided
+        '''
         while value == "":
             value = input("Mandatory field. Please enter a valid value: ").strip()
         return value
  
     def create_contact(self):
+        '''
+        Create a new contact by entering the contact details manually or importing from a CSV file
+        Perform validation checks for phone number, email address, and duplicated contacts
+        '''
         print("[Create Contact]")
         self.logger.info("Start create contact")
         while True:
@@ -91,6 +121,7 @@ class PhoneBook:
             choice = input("Enter your choice (1/2/q): ")
 
             if choice == '1':
+                # Input and validate contact details
                 first_name = self.input_mandatory_field(input("Enter first name: ").strip())
                 last_name = self.input_mandatory_field(input("Enter last name: ").strip())
                 phone_number = self.input_mandatory_field(input("Enter phone number in the format (###) ###-####: ").strip())
@@ -101,6 +132,7 @@ class PhoneBook:
                     email_address = input("Invalid email address. Please try again: ").strip()
                 address = input("Enter address (or press Enter to skip): ").strip()
 
+                # Check for duplicated contacts
                 if not self.is_contact_exist(first_name, last_name):
                     new_contact = Contact(first_name, last_name, phone_number, email_address, address)
                     self.contacts.append(new_contact)
@@ -173,6 +205,11 @@ class PhoneBook:
                 print("Invalid choice. Please try again.\n")
 
     def search_contact(self):
+        '''
+        Search for contacts by full name, phone number, or date created
+        Display the search results and allow the user to view the history of changes for a specific contact
+        Support partial match for full name and phone number
+        '''
         print("[Search Contact]")
         self.logger.info("Start search for contacts")
         while True:
@@ -243,6 +280,11 @@ class PhoneBook:
             self.logger.info("View history of changes")
 
     def search_contacts_by_date(self):
+        '''
+        Search for contacts by the date created
+        Allow the user to enter a single date or a date range
+        Return a list of contacts that were created within the specified date range
+        '''
         print("\nSearch contacts by date (inclusively):")
         print("Enter a single date (yyyy-mm-dd) or a date range (yyyy-mm-dd yyyy-mm-dd)")
         print("Or enter 'q' to quit.")
@@ -265,6 +307,7 @@ class PhoneBook:
             
             elif len(dates) == 2:
                 try:
+                    # Validate the date format
                     start_date = datetime.strptime(dates[0], '%Y-%m-%d').date()
                     end_date = datetime.strptime(dates[1], '%Y-%m-%d').date()
                     is_valid_date = True
@@ -283,6 +326,11 @@ class PhoneBook:
         return matches
 
     def update_contact(self):
+        '''
+        Update an existing contact by selecting the contact to update and the field to modify
+        Allow the user to update the first name, last name, phone number, email address, or address
+        Perform validation checks for phone number, email address, and duplicated contacts
+        '''
         print("[Update Contact]")
         self.logger.info("Start update contact")
         while True:
@@ -341,7 +389,8 @@ class PhoneBook:
                     print("Quiting.\n")
                     self.logger.info(f"Finish update contact. Contact is now: {contact_to_update.get_first_name()} {contact_to_update.get_last_name()}, {contact_to_update.get_phone_number()}, {contact_to_update.get_email_address()}, {contact_to_update.get_address()}")
                     break
-
+                
+                # Verity mandatory fields, validate phone number and email
                 new_value = input("Enter the new value: ").strip()
                 if (field_index in ['1', '2', '3']):
                     new_value = self.input_mandatory_field(new_value)
@@ -354,6 +403,7 @@ class PhoneBook:
                 print()
 
                 if field_index == '1':
+                    # Check for duplicated contacts
                     old_value = contact_to_update.get_first_name()
                     if not old_value.lower() == new_value.lower():
                         if self.is_contact_exist(new_value, contact_to_update.get_last_name()):
@@ -362,6 +412,7 @@ class PhoneBook:
                             continue
                     contact_to_update.set_first_name(new_value)
                 elif field_index == '2':
+                    # Check for duplicated contacts
                     old_value = contact_to_update.get_last_name()
                     if not old_value.lower() == new_value.lower():
                         if self.is_contact_exist(contact_to_update.get_first_name(), new_value):
@@ -380,6 +431,10 @@ class PhoneBook:
                 self.print_contact(contact_to_update)
     
     def delete_contact(self):
+        '''
+        Provide options to delete a single contact, multiple contacts, or all contacts
+        For manually delete, search for the contact by name and select the contact to delete
+        '''
         print("[Delete Contact]")
         self.logger.info("Start delete contact")
         while True:
@@ -402,6 +457,7 @@ class PhoneBook:
                 delete_query = self.input_mandatory_field(input("Enter the name of the contact to delete: ").strip())
                 self.logger.info(f"Try to delete contact: {delete_query}")
 
+                # Search for the contact to delete by name
                 matches = []
                 for contact in self.contacts:
                     query_name = ''.join(delete_query.lower().split())
@@ -449,6 +505,7 @@ class PhoneBook:
                                     attempted_deletions += 1
                                     found = False
                                     for contact in self.contacts:
+                                        # Name should be exactly matches, case-insensitive
                                         contact_full_name = f"{contact.get_first_name()} {contact.get_last_name()}"
                                         if contact_full_name.lower() == full_name.lower():
                                             self.contacts.remove(contact)
@@ -470,6 +527,9 @@ class PhoneBook:
                 self.delete_all_contacts()
 
     def delete_all_contacts(self):
+        '''
+        Delete all contacts in the phone book after confirming with the user
+        '''
         choice = input("Are you sure you want to delete all contacts? (yes/no): ").strip().lower()
         self.logger.info("Try to delete all contacts")
 
@@ -485,6 +545,10 @@ class PhoneBook:
             self.logger.info("Quit delete all contacts")
 
     def sort_contacts(self):
+        '''
+        Sort the contacts by first name, last name, phone number, create time, or update time
+        Allow the user to choose the sort order (ascending or descending)
+        '''
         print("[Sort Contact]")
         self.logger.info("Start sort contacts")
         while True:
@@ -541,9 +605,11 @@ class PhoneBook:
                 self.contacts.sort(key=lambda contact: contact.get_update_time(), reverse=reverse)
                 self.logger.info(f"Sorted contacts by update time {order}")
 
+            # Display the first few contacts after sorting
             print("\nContacts sorted successfully. Here are the first few contacts: ")
             self.print_contact_list(self.contacts[:5], False, show_create_time, show_update_time)
 
+            # Ask the user if they want to see the whole list
             show_more = input("Do you want to see the whole list? Enter 1 to show more or q to quit: ").strip()
             while show_more not in ['1', 'q']:
                 show_more = input("Invalid choice. Please enter 1 or q: ").strip()
@@ -554,6 +620,10 @@ class PhoneBook:
             print()
 
     def group_contacts(self):
+        '''
+        Group the contacts by the first letter of the last name
+        Display the groups of contacts in a tabular format
+        '''
         print("[Group Contact]")
         self.logger.info("Start group contacts")
         print("Group contacts by:")
@@ -592,6 +662,9 @@ class PhoneBook:
         self.logger.info("Quit group contacts")
 
     def export_contacts_to_json(self, file_path):
+        '''
+        Export the contacts to a JSON file
+        '''
         self.logger.info(f"Export contacts to {file_path}")
         contacts_data = [contact.to_dict() for contact in self.contacts]
         with open(file_path, 'w') as json_file:
@@ -600,6 +673,9 @@ class PhoneBook:
         self.logger.info(f"Contacts exported to {file_path}")
 
     def import_contacts_from_json(self, file_path):
+        '''
+        Import contacts from a JSON file
+        '''
         self.logger.info(f"Import contacts from {file_path}")
         try:
             with open(file_path, 'r') as json_file:

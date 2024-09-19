@@ -2,6 +2,9 @@ import datetime
 import logging
 
 class Contact:
+    '''
+    Class to represent a contact in the phone book
+    '''
     logger = logging.getLogger("phoneBookLogger")
 
     def __init__(self, first_name='', last_name='', phone_number='', email_address='', address='', 

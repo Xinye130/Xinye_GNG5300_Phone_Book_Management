@@ -11,6 +11,15 @@ def init_logging():
     )
 
 def main():
+    '''
+    Main function to run the Phone Book Management System
+        - Initialize logging
+        - Create a PhoneBook object
+        - Import contacts from database.json
+        - Display menu options
+        - Perform actions based on user input
+        - Export contacts to database.json before exiting
+    '''
     init_logging()
     logger = logging.getLogger("phoneBookLogger")
     logger.info("Start Phone Book Management System")
