@@ -16,7 +16,7 @@ class Contact:
         self._address = address
         self._create_time = create_time
         self._update_time = update_time
-        self._history = history[:]
+        self._history = history[:] # list of Change objects
         if not self._history:
             message = f'{first_name} {last_name}, {phone_number}, {email_address}, {address}'
             self._history.append(Change('Created', message, '', '', '', self._create_time))
@@ -131,6 +131,9 @@ class Contact:
         )
 
 class Change:
+    '''
+    Class to represent a change in a contact
+    '''
     def __init__(self, operation='', message='', field='', old_value='', new_value='', 
                  change_time=datetime.datetime.now()):
         self._operation = operation
