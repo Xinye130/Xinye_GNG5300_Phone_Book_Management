@@ -3,7 +3,7 @@ import logging
 
 def init_logging():
     logging.basicConfig(
-        filename='example.log', 
+        filename='phonebook_log.log', 
         encoding='utf-8',
         format='%(asctime)s %(message)s', 
         datefmt='%m/%d/%Y %I:%M:%S %p',
@@ -26,7 +26,7 @@ def main():
         print("Welcome to Phone Book Management System!")
         print("1. Print all contacts")
         print("2. Create contact")
-        print("3. Search contact")
+        print("3. Search contact and view history of change")
         print("4. Update contact")
         print("5. Delete contact")
         print("6. Sort contacts")

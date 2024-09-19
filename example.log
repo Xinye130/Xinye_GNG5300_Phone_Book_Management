@@ -131,3 +131,51 @@
 09/18/2024 07:16:07 PM Export contacts to database.json
 09/18/2024 07:16:07 PM Contacts exported to database.json
 09/18/2024 07:16:07 PM Exit Phone Book Management System
+09/19/2024 10:46:42 AM Start Phone Book Management System
+09/19/2024 10:46:42 AM Import contacts from database.json
+09/19/2024 10:46:42 AM Contact added: Alice Johnson, (105) 327-2370, alice.johnson@example.com, 5
+09/19/2024 10:46:42 AM Contact added: Jane Doe, (580) 724-9177, test2@test.com, test
+09/19/2024 10:46:42 AM Contacts imported from database.json
+09/19/2024 10:46:47 AM Start search for contacts
+09/19/2024 10:46:51 AM Search by phone number: @
+09/19/2024 10:47:01 AM Search by phone number: 5
+09/19/2024 10:47:14 AM Quit search for contacts
+09/19/2024 10:47:16 AM Print all contacts
+09/19/2024 10:47:20 AM Start create contact
+09/19/2024 10:47:35 AM Start batch add contacts from add_invalid.csv
+09/19/2024 10:47:35 AM Contact added: John Smith, (980) 755-8640, john.smith@example.com, 123 Elm St
+09/19/2024 10:47:35 AM Contact addition failed: [Failed] Contact 2 not added: Last name missing. 
+09/19/2024 10:47:35 AM Contact addition failed: [Failed] Contact 3 not added: First name missing. 
+09/19/2024 10:47:35 AM Contact addition failed: [Failed] Contact 4 not added: First name missing. Last name missing. 
+09/19/2024 10:47:35 AM Contact addition failed: [Failed] Contact 5 not added: Contact 'John Smith' already exists. Phone number missing. 
+09/19/2024 10:47:35 AM Contact addition failed: [Failed] Contact 6 not added: Contact 'John Smith' already exists. 
+09/19/2024 10:47:35 AM Contact addition failed: [Failed] Contact 7 not added: Contact 'John Smith' already exists. 
+09/19/2024 10:47:35 AM Contact addition failed: [Failed] Contact 8 not added: First name missing. Last name missing. Phone number missing. 
+09/19/2024 10:47:35 AM Contact addition failed: [Failed] Contact 9 not added: First name missing. Last name missing. Phone number missing. 
+09/19/2024 10:47:35 AM Contact addition failed: [Failed] Contact 10 not added: First name missing. Last name missing. Phone number missing. 
+09/19/2024 10:47:35 AM Contact addition failed: [Failed] Contact 11 not added: Contact 'John Smith' already exists. Phone number invalid, should be in format (###) ###-####. 
+09/19/2024 10:47:35 AM Contact addition failed: [Failed] Contact 12 not added: Contact 'John Smith' already exists. Email address invalid. 
+09/19/2024 10:47:35 AM Contact addition failed: [Failed] Contact 13 not added: Contact 'John Smith' already exists. Phone number invalid, should be in format (###) ###-####. Email address invalid. 
+09/19/2024 10:47:35 AM Contact addition failed: [Failed] Contact 14 not added: Last name missing. Phone number invalid, should be in format (###) ###-####. Email address invalid. 
+09/19/2024 10:47:35 AM Contact addition failed: [Failed] Contact 15 not added: Contact 'Jane Doe' already exists. 
+09/19/2024 10:47:35 AM Contact addition failed: [Failed] Contact 16 not added: Contact 'Alice Johnson' already exists. 
+09/19/2024 10:47:35 AM Contact added: Bob Smith, (511) 467-3235, bob.smith@example.com, 101 Maple St
+09/19/2024 10:47:35 AM Contact added: Charlie Brown, (422) 413-3322, charlie.brown@example.com, 202 Birch St
+09/19/2024 10:47:35 AM Batch addition completed: 3/18 contacts added successfully
+09/19/2024 10:47:45 AM Quit Create Contact
+09/19/2024 10:47:48 AM Start delete contact
+09/19/2024 10:47:53 AM Start batch delete contacts from delete.csv
+09/19/2024 10:47:53 AM Contact not found: #!
+09/19/2024 10:47:53 AM Contact deleted: John Smith
+09/19/2024 10:47:53 AM Contact not found: Jane (Doe)
+09/19/2024 10:47:53 AM Contact not found: Alice J
+09/19/2024 10:47:53 AM Contact deleted: Bob Smith
+09/19/2024 10:47:53 AM Contact deleted: Charlie Brown
+09/19/2024 10:47:53 AM Batch delete completed: 3/6 contacts deleted successfully
+09/19/2024 10:48:09 AM Try to delete all contacts
+09/19/2024 10:48:09 AM All contacts deleted
+09/19/2024 10:48:14 AM Quit delete contact
+09/19/2024 10:48:17 AM Print all contacts
+09/19/2024 10:48:20 AM Export contacts to database.json
+09/19/2024 10:48:20 AM Contacts exported to database.json
+09/19/2024 10:48:20 AM Exit Phone Book Management System

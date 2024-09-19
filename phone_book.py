@@ -14,7 +14,9 @@ class PhoneBook:
         self.contacts = []
 
     def print_all_contacts(self):
+        print("[Print All Contacts]")
         self.logger.info("Print all contacts")
+        
         if not self.contacts:
             print("No contacts available.\n")
             return
@@ -79,6 +81,7 @@ class PhoneBook:
         return value
  
     def create_contact(self):
+        print("[Create Contact]")
         self.logger.info("Start create contact")
         while True:
             print("How would you like to add contacts:")
@@ -170,6 +173,7 @@ class PhoneBook:
                 print("Invalid choice. Please try again.\n")
 
     def search_contact(self):
+        print("[Search Contact]")
         self.logger.info("Start search for contacts")
         while True:
             print("Search contacts by:")
@@ -190,7 +194,7 @@ class PhoneBook:
             matches = []
             show_create_time = False
             if search_type in ['1', '2']:
-                search_query = self.input_mandatory_field(input("Enter the search query: ").strip()) 
+                search_query = self.input_mandatory_field(input("Enter the search query (partial match supported): ").strip()) 
                 
                 if search_type == '1':
                     self.logger.info(f"Search by full name: {search_query}")
@@ -206,7 +210,7 @@ class PhoneBook:
                     elif search_type == '2':
                         query_number = re.sub(r'\D', '', search_query)
                         phone_number = re.sub(r'\D', '', contact.get_phone_number())
-                        if query_number in phone_number:
+                        if not query_number == "" and query_number in phone_number:
                             matches.append(contact)
             
             elif search_type == '3':
@@ -279,6 +283,7 @@ class PhoneBook:
         return matches
 
     def update_contact(self):
+        print("[Update Contact]")
         self.logger.info("Start update contact")
         while True:
             print("Update contact")
@@ -375,6 +380,7 @@ class PhoneBook:
                 self.print_contact(contact_to_update)
     
     def delete_contact(self):
+        print("[Delete Contact]")
         self.logger.info("Start delete contact")
         while True:
             print("How would you like to delete contacts:")
@@ -473,12 +479,13 @@ class PhoneBook:
         if choice == 'yes':
             self.contacts.clear()
             print("All contacts deleted.")
-            self.logger.info("All contacts deleted")
+            self.logger.info("All contacts deleted\n")
         else:
             print()
             self.logger.info("Quit delete all contacts")
 
     def sort_contacts(self):
+        print("[Sort Contact]")
         self.logger.info("Start sort contacts")
         while True:
             print("Do you want to sort contacts by:")
@@ -547,6 +554,7 @@ class PhoneBook:
             print()
 
     def group_contacts(self):
+        print("[Group Contact]")
         self.logger.info("Start group contacts")
         print("Group contacts by:")
         print("1. First letter of last name")
