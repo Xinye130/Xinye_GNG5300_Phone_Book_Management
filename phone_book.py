@@ -613,14 +613,3 @@ class PhoneBook:
         except json.JSONDecodeError:
             print(f"Error decoding JSON from file {file_path}.")
             self.logger.info(f"Error decoding JSON from file {file_path}.")
-
-
-'''
-Todo:
-- (Exporting to csv)
-
-To improve:
-- Grouping
-- Confirm update
-- Prettify console output of app
-'''

@@ -1,0 +1,30 @@
+09/19/2024 01:40:32 PM Start Phone Book Management System
+09/19/2024 01:40:32 PM Import contacts from database.json
+09/19/2024 01:40:32 PM Contacts imported from database.json
+09/19/2024 01:40:36 PM Start create contact
+09/19/2024 01:40:45 PM Start batch add contacts from add_old.csv
+09/19/2024 01:40:45 PM Contact added: John Smith, (980) 755-8640, john.smith@example.com, 123 Elm St
+09/19/2024 01:40:45 PM Contact added: Jane Doe, (580) 724-9177, jane.doe@example.com, 456 Oak St
+09/19/2024 01:40:45 PM Contact added: Alice Johnson, (105) 327-2370, alice.johnson@example.com, 789 Pine St
+09/19/2024 01:40:45 PM Contact added: Bob Smith, (511) 467-3235, bob.smith@example.com, 101 Maple St
+09/19/2024 01:40:45 PM Contact added: Charlie Brown, (422) 413-3322, charlie.brown@example.com, 202 Birch St
+09/19/2024 01:40:45 PM Batch addition completed: 5/5 contacts added successfully
+09/19/2024 01:40:48 PM Quit Create Contact
+09/19/2024 01:40:50 PM Print all contacts
+09/19/2024 01:41:04 PM Start update contact
+09/19/2024 01:41:24 PM Start update contact: Alice Johnson, (105) 327-2370, alice.johnson@example.com, 789 Pine St
+09/19/2024 01:41:34 PM Address changed from 'first update' to 'first update'
+09/19/2024 01:41:41 PM Address changed from 'second update' to 'second update'
+09/19/2024 01:41:55 PM Email Address changed from 'third.update@example.com' to 'third.update@example.com'
+09/19/2024 01:41:57 PM Finish update contact. Contact is now: Alice Johnson, (105) 327-2370, third.update@example.com, second update
+09/19/2024 01:42:02 PM Quit update contact
+09/19/2024 01:42:04 PM Start search for contacts
+09/19/2024 01:42:11 PM Search by full name: jo
+09/19/2024 01:42:13 PM View history of changes
+09/19/2024 01:42:24 PM Quit search for contacts
+09/19/2024 01:43:10 PM Start sort contacts
+09/19/2024 01:43:16 PM Sorted contacts by update time descending
+09/19/2024 01:43:21 PM Quit sort contacts
+09/19/2024 01:43:23 PM Export contacts to database.json
+09/19/2024 01:43:23 PM Contacts exported to database.json
+09/19/2024 01:43:23 PM Exit Phone Book Management System
